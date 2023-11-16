@@ -66,6 +66,7 @@ User table
         email,
         username,
         password,
+        rank
     )
 
 Relation table
@@ -93,6 +94,29 @@ Wiki table
         creation_date,
         url
     )
+
+Rank table
+
+    Rank (
+        uuid_rank,
+        title,
+        desc,
+        power
+    )
+
+Permissions table
+
+    permissions_allowed (
+        uuid_permissions,
+        uuid_rank
+    )
+
+    permissions (
+        uuid_permissions,
+        title,
+        command
+    )
+
 
 ### Conversation Database
 
@@ -124,13 +148,17 @@ Tag table
 
 ### Wiki Database
 
-Post table
+Articles table
 
-    Post (
+    Articles (
         uuid,
         title,
         desc,
-        content
+        content,
+        icon,
+        uuid_author,
+        published,
+        visibility
     )
 
 Comments table
@@ -139,6 +167,7 @@ Comments table
         uuid,
         uuid_author,
         content,
+        published,
         modified
     )
 
@@ -147,7 +176,7 @@ Editor table
     Editor (
         uuid_user,
         uuid_post,
-        nEdition,
-        perm
+        numEdit,
+        pushRequest
     )
 
