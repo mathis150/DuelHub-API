@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A FGC A.P.I",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "jest"
   },
