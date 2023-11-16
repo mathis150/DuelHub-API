@@ -1,0 +1,28 @@
+openapi: 3.0.3
+info:
+  title: DuelHub-API
+  description: This API manage a FGC, a wiki, and a forum.
+  contact:
+    email: api.sav@duelhub.net
+  version: 1.0.0
+servers:
+  - url: "{protocol}://{server}"
+    variables:
+      protocol:
+        enum:
+          - https
+          - http
+        default: https
+      server:
+        enum:
+          - localhost:3000
+        default: localhost:3000
+tags:
+  - name: users
+    description: User management
+paths:
+  /users:
+    get:
+      responses:
+        '200':
+          description: OK
