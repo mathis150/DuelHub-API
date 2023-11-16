@@ -110,7 +110,7 @@ Permissions table
         uuid_permissions,
         uuid_rank
     )
-    
+
     permissions (
         uuid_permissions,
         title,
@@ -176,7 +176,7 @@ Editor table
     Editor (
         uuid_user,
         uuid_post,
-        nEdition,
-        perm
+        numEdit,
+        pushRequest
     )
 
