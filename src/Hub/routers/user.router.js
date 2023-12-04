@@ -1,60 +1,58 @@
 import express from "express"
-import { htmlError } from "../../errorhandler.utils.js"
 import * as controller from '../controllers/user.controller.js'
-import * as middleware from '../middleware/user.middleware.js'
+import * as userMiddleware from '../middleware/user.middleware.js'
+import * as roomMiddleware from '../middleware/room.middleware.js'
+import * as gameMiddleware from '../middleware/game.middleware.js'
 
-export const userrouter = express.Router()
+export const router = express.Router()
 
-userrouter.get("/",(req,res) => {
+router.get("/",(req,res) => {
     //TODO: call database to see if its available
     const available = true
-    if (available) res.status(200).json(htmlError(200,"database is available"))
-    res.status(500).json(htmlError(500,"database is unavailable at this time"))
-})
-
-userrouter.get("/",(req,res) => {
-    res.status(500).json({code:500,message:"test"})
+    if (available) res.status(200).json({code:200,status:"database is available"})
+    res.status(500).json({code:500,status:"database is unavailable at this time"})
 })
 
 //get user uuid, username , rank
-userrouter.get("/:uuid_user",middleware.useruuidcheck,controller.get_userinfo)
+router.get("/:uuid_user",userMiddleware.useruuidcheck)
 //get user uuid, basename, username, rank, email, friends_uuid, favorite_uuid, games_uuid
-userrouter.get("/:uuid_user/details",middleware.useruuidcheck,controller.get_useradvancedinfo)
+router.get("/:uuid_user/details",userMiddleware.useruuidcheck)
 
 //get user uuid, username, friends_uuid
-userrouter.get("/:uuid_user/friendlist",middleware.useruuidcheck,controller.get_friendlist)
-//get user uuid, username, same for all friends
-userrouter.get("/:uuid_user/friendlist/details",middleware.useruuidcheck,controller.get_friendlistdetails)
+router.get("/:uuid_user/friendlist",userMiddleware.useruuidcheck)
+//get user details of specified friend
+router.get("/:uuid_user/friendlist/*",userMiddleware.useruuidcheck)
 
 //get user uuid, username, favorite_uuid
-userrouter.get("/:uuid_user/favoritelist",middleware.useruuidcheck,controller.get_favoritelist)
-//get user uuid, username, same for all favorites
-userrouter.get("/:uuid_user/favoritelist/details",middleware.useruuidcheck,controller.get_favoritelistdetails)
+router.get("/:uuid_user/favoritelist",userMiddleware.useruuidcheck)
+//reroute to user router
+router.get("/:uuid_user/favoritelist/*",userMiddleware.useruuidcheck)
 
-//get user uuid, username, games_uuid
-userrouter.get("/:uuid_user/gamelist",middleware.useruuidcheck,controller.get_gamelist)
-//get user uuid, username, games_info
-userrouter.get("/:uuid_user/gamelist/details",middleware.useruuidcheck,controller.get_gamelistdetails)
+//get user's gamelist
+router.get("/:uuid_user/gamelist",userMiddleware.useruuidcheck)
+//reroute to game router
+router.get("/:uuid_user/gamelist/*",userMiddleware.useruuidcheck)
 
 //get user rooms
-userrouter.get("/:uuid_user/room",middleware.useruuidcheck,controller.get_roomlist)
+router.get("/:uuid_user/room",userMiddleware.useruuidcheck)
+//reroute to room router
+router.get("/:uuid_user/room/*",userMiddleware.useruuidcheck)
 
 
 //add favorite to user's favoritelist
-userrouter.post("/:uuid_user/favorite/:uuid_friend",middleware.useruuidcheck,middleware.favoriteuuidcheck,controller.post_addfavorite)
+router.post("/:uuid_user/favorite/:uuid_favorite",userMiddleware.useruuidcheck,userMiddleware.favoriteuuidcheck)
 //add friend to user's friendlist
-userrouter.post("/:uuid_user/friend/:uuid_friend",middleware.useruuidcheck,middleware.frienduuidcheck,controller.post_addfriend)
+router.post("/:uuid_user/friend/:uuid_friend",userMiddleware.useruuidcheck,userMiddleware.frienduuidcheck)
 //add game to user's gamelist
-userrouter.post("/:uuid_user/game/:uuid_game",middleware.useruuidcheck,middleware.gameuuidcheck,controller.post_addgame)
+router.post("/:uuid_user/game/:uuid_game",userMiddleware.useruuidcheck,gameMiddleware.gameuuidcheck)
 //add room to user's roomlist
-userrouter.post("/:uuid_user/room/:uuid_room",middleware.useruuidcheck,middleware.roomuuidcheck,controller.post_addroom)
+router.post("/:uuid_user/room/:uuid_room",userMiddleware.useruuidcheck,roomMiddleware.roomuuidcheck)
 
-
-//add favorite to user's favoritelist
-userrouter.delete("/:uuid_user/favorite/:uuid_friend",middleware.useruuidcheck,middleware.favoriteuuidcheck,controller.delete_removefavorite)
-//add friend to user's friendlist
-userrouter.delete("/:uuid_user/friend/:uuid_friend",middleware.useruuidcheck,middleware.frienduuidcheck,controller.delete_removefriend)
-//add game to user's gamelist
-userrouter.delete("/:uuid_user/game/:uuid_game",middleware.useruuidcheck,middleware.gameuuidcheck,controller.delete_removegame)
-//add room to user's roomlist
-userrouter.delete("/:uuid_user/room/:uuid_room",middleware.useruuidcheck,middleware.roomuuidcheck,controller.delete_removeroom)
+//remove favorite from user's favoritelist
+router.delete("/:uuid_user/favorite/:uuid_friend",userMiddleware.useruuidcheck,userMiddleware.frienduuidcheck)
+//remove friend from user's friendlist
+router.delete("/:uuid_user/friend/:uuid_friend",userMiddleware.useruuidcheck,userMiddleware.frienduuidcheck)
+//remove game from user's gamelist
+router.delete("/:uuid_user/game/:uuid_game",userMiddleware.useruuidcheck,gameMiddleware.gameuuidcheck)
+//remove room from user's roomlist
+router.delete("/:uuid_user/room/:uuid_room",userMiddleware.useruuidcheck,roomMiddleware.roomuuidcheck)
