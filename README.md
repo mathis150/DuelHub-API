@@ -64,6 +64,7 @@ User table
     User (
         uuid,
         email,
+        basename,
         username,
         password,
         rank
