@@ -1,6 +1,6 @@
 const express = require('express')
 export const router = express.Router()
-const editorController = require('../controllers/comments.controller')
+const editorController = require('../controllers/editor.controller')
 
 router.get('/:uuid-article', editorController.getArticlesEditorsByUUID)
 router.get('/:uuid-editor', editorController.getEditorArticlesByUUID)

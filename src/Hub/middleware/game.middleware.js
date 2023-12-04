@@ -1,4 +1,4 @@
-import { isUUID } from "../utils/uuid.utils"
+import { isUUID } from "../utils/uuid.utils.js"
 
 export const gameuuidcheck = (req,res,next) => {
     if(!isUUID(req.params.uuid_game)) next({code:400,status:"provided for parameter \"uuid_game\" is not a uuid"})
