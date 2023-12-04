@@ -31,7 +31,7 @@ router.get("/:uuid_room/feed",roomMiddleware.roomuuidcheck)
 //get room last specified number of messages
 router.get("/:uuid_room/feed/:depth",roomMiddleware.roomuuidcheck,roomMiddleware.depthuuidcheck)
 //reroute to message router
-router.get("/:uuid_room/feed/:depth/*",roomMiddleware.roomuuidcheck,roomMiddleware.depthuuidcheck)
+router.get("/:uuid_room/feed/:depth/*",roomMiddleware.roomuuidcheck,roomMiddleware.depthcheck)
 //get specified user message list
 router.get("/:uuid_room/feed/:uuid_user",roomMiddleware.roomuuidcheck,userMiddleware.useruuidcheck)
 //reroute to message router
