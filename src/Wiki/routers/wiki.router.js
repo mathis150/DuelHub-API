@@ -1,8 +1,8 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const articlesRouter = require('./articles.router')
-const commentsRouter = require('./comments.router')
-const editorsRouter = require('./editors.router')
+import * as articlesRouter from'./articles.router'
+import * as commentsRouter from'./comments.router'
+import * as editorsRouter from './editors.router'
 
 router.get('/articles/', articlesRouter)
 router.get('/comments/', commentsRouter)

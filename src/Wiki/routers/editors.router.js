@@ -1,9 +1,9 @@
-const express = require('express')
+import express from 'express'
 export const router = express.Router()
-const editorController = require('../controllers/editor.controller')
+import * as editorController from '../controllers/editor.controller'
+import * as editorsMiddleware from '../middleware/editors.middleware'
 
-router.get('/:uuid-article', editorController.getArticlesEditorsByUUID)
-router.get('/:uuid-editor', editorController.getEditorArticlesByUUID)
-router.post('/:uuid-article', editorController.postCommentToArticle)
-router.put('/:uuid-editor/:uuid-article', editorController.updateCommentByUUID)
-router.delete('/:uuid-editor/:uuid-article', editorController.deleteCommentByUUID)
+router.get('/articles/:uuid-article', editorsMiddleware.checkArticleUUID, editorController.getArticlesEditorsByUUID)
+router.get('/:uuid-editor', editorsMiddleware.checkEditorUUID, editorController.getEditorByUUID)
+router.post('/', editorController.addEditorToArticle)
+router.delete('/:uuid-editor/:uuid-article', editorsMiddleware.checkDeleteUUID, editorController.deleteEditorByUUID)

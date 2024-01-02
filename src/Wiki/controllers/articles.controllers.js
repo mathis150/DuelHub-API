@@ -9,11 +9,11 @@ exports.getWikiArticleByUUID = async (req, res) => {
     res.json(returnData)
 }
 exports.createWikiArticle = async (req, res) => {
-    const returnData = await createWikiArticle(req.body.title, req.body.desc, req.body.content, req.body.icon, req.body.uuid_author, req.body.published, req.body.visibility)
+    const returnData = await createWikiArticle(req.body.title, req.body.description, req.body.content, req.body.icon, req.body.uuid_author, req.body.published, req.body.visibility)
     res.json(returnData)
 }
 exports.updateWikiArticle = async (req, res) => {
-    const returnData = await updateWikiArticle(req.params.uuid)
+    const returnData = await updateWikiArticle(req.params.uuid, req.body.title, req.body.description, req.body.content, req.body.icon, req.body.uuid_author, req.body.published, req.body.visibility)
     res.json(returnData)
 }
 exports.deleteWikiArticle = async (req, res) => {

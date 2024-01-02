@@ -4,6 +4,7 @@ dotenv.config()
 import { app } from "./app.js"
 import { userrouter } from "./src/Hub/routers/user.router.js"
 
+const host = process.env.SERVERHOST || localhost
 const port = process.env.SERVERPORT || 3000
 
 app.use("/user",userrouter)
@@ -19,5 +20,5 @@ app.use((err,req,res,next) => {
 })
 
 app.listen(port, () => {
-    console.log(`port: ${port}\ntesturl: http://127.0.0.1:${port}/testconnection\nurl: http://127.0.0.1:${port}`)
+    console.log(`port: ${port}\ntesturl: http://${host}:${port}/testconnection\nurl: http://127.0.0.1:${port}`)
 })
