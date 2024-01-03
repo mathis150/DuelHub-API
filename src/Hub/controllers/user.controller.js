@@ -53,6 +53,10 @@ export const addroom = (req,res) => {
     res.json(service.addroom(req.params.uuid_user,req.params.uuid_room))
 }
 
+export const blockuser = (req,res) => {
+    res.json(service.blockuser(req.params.uuid_user,req.params.uuid_blocked))
+}
+
 //? DELETE
 
 export const deleteuser = (req,res) => {
@@ -73,4 +77,8 @@ export const removegame = (req,res) => {
 
 export const removeroom = (req,res) => {
     res.json(service.removeroom(req.params.uuid_user,req.params.uuid_room))
+}
+
+export const unblockuser = (req,res) => {
+    res.json(service.unblockuser(req.params.uuid_user,req.params.uuid_blocked))
 }

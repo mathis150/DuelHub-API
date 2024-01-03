@@ -30,3 +30,8 @@ export const favoriteuuidcheck = (req,res,next) => {
     if(!isUUID(req.params.uuid_favorite)) next({code:400,status:"provided for parameter \"uuid_favorite\" is not a uuid"})
     next()
 }
+
+export const blockeduuidcheck = (req,res,next) => {
+    if(!isUUID(req.params.uuid_blocked)) next({code:400,status:"provided for parameter \"uuid_blocked\" is not a uuid"})
+    next()
+}

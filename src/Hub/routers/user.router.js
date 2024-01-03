@@ -41,6 +41,8 @@ router.post("/:uuid_user/friend/:uuid_friend",userMiddleware.useruuidcheck,userM
 router.post("/:uuid_user/game/:uuid_game",userMiddleware.useruuidcheck,gameMiddleware.gameuuidcheck,controller.addgame)
 //add room to user's roomlist
 router.post("/:uuid_user/room/:uuid_room",userMiddleware.useruuidcheck,roomMiddleware.roomuuidcheck,controller.addroom)
+//block user
+router.post("/:uuid_user/block/:uuid_blocked",userMiddleware.useruuidcheck,userMiddleware.blockeduuidcheck,controller.blockuser)
 
 //remove favorite from user's favoritelist
 router.delete("/:uuid_user/favorite/:uuid_friend",userMiddleware.useruuidcheck,userMiddleware.frienduuidcheck,controller.removefavorite)
@@ -50,3 +52,5 @@ router.delete("/:uuid_user/friend/:uuid_friend",userMiddleware.useruuidcheck,use
 router.delete("/:uuid_user/game/:uuid_game",userMiddleware.useruuidcheck,gameMiddleware.gameuuidcheck,controller.removegame)
 //remove room from user's roomlist
 router.delete("/:uuid_user/room/:uuid_room",userMiddleware.useruuidcheck,roomMiddleware.roomuuidcheck,controller.removeroom)
+//unblock user
+router.delete("/:uuid_user/block/:uuid_blocked",userMiddleware.useruuidcheck,userMiddleware.blockeduuidcheck,controller.unblockuser)

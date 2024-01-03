@@ -295,7 +295,7 @@ export const addfavorite = async (uuid_user,uuid_favorite) => {
 
     const user_relation = {
         uuid_user_primary: uuid_user,
-        uuid_user_secondary: uuid_friend,
+        uuid_user_secondary: uuid_favorite,
         relation: "favorite"
     }
 
@@ -361,6 +361,35 @@ export const addroom = async (uuid_user,uuid_room) => {
 
     return response
 }
+
+export const blockuser = async (uuid_user,uuid_blocked) => {
+    await sequelize.sync()
+
+    var response = {
+        code: 200,
+        status: null,
+        request: null,
+        data: []
+    }
+
+    const user_relation = {
+        uuid_user_primary: uuid_user,
+        uuid_user_secondary: uuid_blocked,
+        relation: "blocked"
+    }
+
+    const returnData = await Relation.create(user_relation)
+
+    if (!(returnData instanceof Relation)) {
+        response.code = 400
+        response.status = "error in given information (uuid_user and uuid_blocked is non nullable)"
+        return response
+    }
+
+    return response
+}
+
+
 
 //?DELETE
 
@@ -464,6 +493,27 @@ export const removeroom = async (uuid_user,uuid_room) => {
     if (!(returnData instanceof User_Room)) {
         response.code = 400
         response.status = "the user is not in this room; Or room or user dosnt exist"
+        return response
+    }
+
+    return response
+}
+
+export const unblockuser = async (uuid_user,uuid_blocked) => {
+    await sequelize.sync()
+
+    var response = {
+        code: 200,
+        status: null,
+        request: null,
+        data: []
+    }
+
+    var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_user,uuid_user_secondary: uuid_blocked,relation:"blocked"}})
+
+    if (!(returnData instanceof Relation)) {
+        response.code = 400
+        response.status = "the specified user are not favorites"
         return response
     }
 
