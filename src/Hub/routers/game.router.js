@@ -12,28 +12,21 @@ router.get("/",(req,res) => {
 })
 
 //get game name, series, studio, platform, genre, wiki
-router.get("/:uuid_game",gameMiddleware.gameuuidcheck)
+router.get("/:uuid_game",gameMiddleware.gameuuidcheck,controller.getgame)
 //get game name, series, studio, platform, genre, wiki, player online, day peak, month peak, alltime peak
-router.get("/:uuid_game/details",gameMiddleware.gameuuidcheck)
+router.get("/:uuid_game/details",gameMiddleware.gameuuidcheck,controller.getgamedetails)
+
 //get game uuid, name by name
-router.get("/query/name/:name_game",gameMiddleware.namegamecheck)
-//reroute to game router
-router.get("/query/name/:name_game/*",gameMiddleware.namegamecheck)
-
+router.get("/query/name/:name_game",gameMiddleware.namegamecheck,controller.getgamewithname)
 //get games uuid, name by studio
-router.get("/query/studio/:name_studio",gameMiddleware.namestudiocheck)
-//get games uuid, name by studio
-router.get("/query/studio/:name_studio/*",gameMiddleware.namestudiocheck)
-
+router.get("/query/studio/:name_studio",gameMiddleware.namestudiocheck,controller.getgamewithstudio)
 //get games uuid, name by genre
-router.get("/query/genre/:name_genre",gameMiddleware.namegenrecheck)
-//get games uuid, name by genre
-router.get("/query/genre/:name_genre/*",gameMiddleware.namegenrecheck)
+router.get("/query/genre/:name_genre",gameMiddleware.namegenrecheck,controller.getgamewithgenre)
 
 //add game using body
-router.post("/")
+router.post("/",gameMiddleware.gamebodycheck,controller.addgame)
 //change game info using body
-router.post("/:uuid_game/info",gameMiddleware.gameuuidcheck)
+router.post("/:uuid_game",gameMiddleware.gameuuidcheck,controller.modifygame)
 
 //add game using body
-router.delete("/:uuid_game",gameMiddleware.gameuuidcheck)
+router.delete("/:uuid_game",gameMiddleware.gameuuidcheck,controller.deletegame)
