@@ -28,7 +28,6 @@ tags:
     description: add and modify game infos
 paths:
 
-#! GET
 
   /users/{uuid_user}:
     get:
@@ -69,7 +68,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     
-
   /users/{uuid_user}/details:
     get:
       tags:
@@ -460,8 +458,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
-
-#! DELETE
 
 components:
   schemas:
