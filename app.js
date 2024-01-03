@@ -1,13 +1,15 @@
 //Imports required
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const OpenApiValidator = require('express-openapi-validator')
-const swaggerUI = require('swagger-ui-express')
-const YALM = require('yamljs')
+import express from "express"
+import cors from "cors"
+import OpenApiValidator from "express-openapi-validator"
+import swaggerUI from 'swagger-ui-express'
+import YAML from "yamljs"
+
+export const app = express()
+
 
 //Fichier Swagger
-const swaggerDocument = YALM.load('./open-api.yaml')
+const swaggerDocument = YAML.load('./open-api.yaml')
 
 //Middlewares globaux
 app.use(cors())
@@ -21,5 +23,15 @@ app.use(
     })
 )
 
+app.get("/testconnection",(req,res) => {
+    res.status(200).json({code:200,message:"successfully connected to database"})
+})
+
+app.use((err,req,res,next) => {
+    err.code = err.code || 500
+    err.status = err.status || "no error message provided"
+    res.json({code:err.code,status:err.status})
+})
+
+
 //Export pour server.js
-module.exports = app
