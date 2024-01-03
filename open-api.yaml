@@ -18,16 +18,764 @@ servers:
           - localhost:3000
         default: localhost:3000
 tags:
-  - name: users
-    description: User management
+  - name: Users
+    description: manage relation of user and user infos
+  - name: Messages
+    description: get and post messages in rooms
+  - name: Rooms
+    description: create rooms, manage members and get the messages inside
+  - name: Games
+    description: add and modify game infos
 paths:
-  /users:
+
+#! GET
+
+  /users/{uuid_user}:
     get:
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
       responses:
         '200':
           description: OK
-  /wiki/articles:
-    get:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200UserData'
+    
+    delete:
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: uuid of the user to delete
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+    
+
+  /users/{uuid_user}/details:
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200UserDataDetails'
+
+  /users/{uuid_user}/friendlist:
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserFriendList200'
+
+  /users/{uuid_user}/favoritelist:
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserFavoriteList200'
+
+  /users/{uuid_user}/gamelist:
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserGameList200'
+
+  /users/{uuid_user}/roomlist:
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserRoomList200'
+
+  /users/search/{username}:
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: username
+          in: path
+          description: the username of the desired user
+          required: true
+          schema:
+            type: string
+            example: Kentin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200UserData'
+  
+  /users/:
+    post:
+      description: Add user using body
+      tags:
+        - Users
+      requestBody:
+        $ref: '#/components/requestBodies/UserCreation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+        '400':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserCreation400'
+
+  /users/{uuid_user}/favorite/{uuid_favorite}:
+    post:
+      description: add favorite to a user
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_favorite
+          in: path
+          description: the uuid of the user to add to favorite
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+    delete:
+      description: remove favorite from a user
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_favorite
+          in: path
+          description: the uuid of the user to remove from favorite
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /users/{uuid_user}/friend/{uuid_friend}:
+    post:
+      description: add a friend to a user
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_friend
+          in: path
+          description: the uuid of the user to add to friend
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+    delete:
+      description: remove a friend from a user
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_friend
+          in: path
+          description: the uuid of the user to remove from friend
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /users/{uuid_user}/game/{uuid_game}:
+    post:
+      description: add a game to a user
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_game
+          in: path
+          description: the uuid of the game to add
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+    delete:
+      description: remove a game from a user
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_game
+          in: path
+          description: the uuid of the game to remove
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /users/{uuid_user}/room/{uuid_room}:
+    post:
+      description: add a room to a users list
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_game
+          in: path
+          description: the uuid of the room to add
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+    delete:
+      description: remove a room from a users list
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_game
+          in: path
+          description: the uuid of the room to remove
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'            
+  
+  /users/{uuid_user}/block/{uuid_blocked}:
+    post:
+      description: add a user to a users blocked list
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_blocked
+          in: path
+          description: the uuid of the user to block
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+    delete:
+      description: remove a user from a users blocked list
+      tags:
+        - Users
+      parameters:
+        - name: uuid_user
+          in: path
+          description: the uuid of the primary user
+          required: true
+          schema:
+            type: string
+        - name: uuid_blocked
+          in: path
+          description: the uuid of the user to unblock
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+#! DELETE
+
+components:
+  schemas:
+    DataUserEX1:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 6a988430-1076-43f3-998e-52fe808f6162
+          example: 6a988430-1076-43f3-998e-52fe808f6162
+        username:
+          type: string
+          default: Kentin
+          example: Kentin
+
+    DataUserDetailsEX1:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 6a988430-1076-43f3-998e-52fe808f6162
+          example: 6a988430-1076-43f3-998e-52fe808f6162
+        username:
+          type: string
+          default: Kentin
+          example: Kentin
+        email:
+          type: string
+          default: kentinter@gmail.com
+          example: kentinter@gmail.com
+        last_connection:
+          type: string
+          default: 2024-05-10-12:11
+          example: 2024-05-10-12:11
+        first_connection:
+          type: string
+          default: 2024-07-30-04:45
+          example: 2024-07-30-04:45
+
+    DataUserEX2:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 00c7af57-4ea4-4aa1-83aa-6d7b61f472d3
+          example: 00c7af57-4ea4-4aa1-83aa-6d7b61f472d3
+        username:
+          type: string
+          default: TotoSY
+          example: TotoSY
+
+    DataUserDetailsEX2:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 00c7af57-4ea4-4aa1-83aa-6d7b61f472d3
+          example: 00c7af57-4ea4-4aa1-83aa-6d7b61f472d3
+        username:
+          type: string
+          default: TotoSY
+          example: TotoSY
+        email:
+          type: string
+          default: toribashido@gmail.com
+          example: toribashido@gmail.com
+        last_connection:
+          type: string
+          default: 2024-01-30-14:25
+          example: 2024-01-30-14:25
+        first_connection:
+          type: string
+          default: 2024-04-03-11:32
+          example: 2024-04-03-11:32
+
+    DataGameEx:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 60f97de3-4d49-44de-8512-fbcef5fb1075
+          example: 60f97de3-4d49-44de-8512-fbcef5fb1075
+        username:
+          type: string
+          default: "BlazBlue: Centralfiction"
+          example: "BlazBlue: Centralfiction"
+
+    DataRoomEx:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 8dbc2aaa-b2c2-414b-93e0-8b093b0fa639
+          example: 8dbc2aaa-b2c2-414b-93e0-8b093b0fa639
+        username:
+          type: string
+          default: G@ym3rs
+          example: G@ym3rs
+
+    Return200Empty:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          default: null
+          example: null
+
+    Return200UserData:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataUserEX1'
+
+    Return200UserDataDetails:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataUserDetailsEX1'
+
+    ReturnUserFriendList200:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/DataUserEX1'
+              - $ref: '#/components/schemas/DataUserEX2'
+
+    ReturnUserFavoriteList200:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/DataUserEX1'
+              - $ref: '#/components/schemas/DataUserEX2'
+
+    ReturnUserGameList200:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataGameEx'
+
+    ReturnUserRoomList200:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRoomEx'
+
+    ReturnUserCreation400:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:
+        code:
+          type: number
+          default: 400
+          example: 400
+        status:
+          type: string
+          default: error in given information (username, password and email is non nullable)
+          example: error in given information (username, password and email is non nullable)
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          default: null
+          example: null
+
+  requestBodies:
+    UserCreation:
+      required: true
+      description: the body used to create a user
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - username
+              - password
+              - email
+            properties:
+              username:
+                type: string
+                example: Kentin
+              password:
+                type: string
+                example: cZvMPqGzEb3Eu3I4sSoGuZgs9aEdHChI
+              email:
+                type: string
+                example: kentinter@gmail.com

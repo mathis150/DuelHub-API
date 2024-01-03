@@ -16,7 +16,7 @@ router.get("/",(req,res) => {
 
 //get user uuid, username 
 router.get("/:uuid_user",userMiddleware.useruuidcheck,controller.getuser)
-//get user uuid, username, email, last_connection, full_connection
+//get user uuid, username, email, last_connection, first_connection
 router.get("/:uuid_user/details",userMiddleware.useruuidcheck,controller.getuserdetails)
 
 //get user uuid, username, friends_uuid
@@ -26,7 +26,7 @@ router.get("/:uuid_user/favoritelist",userMiddleware.useruuidcheck,controller.ge
 //get user's gamelist
 router.get("/:uuid_user/gamelist",userMiddleware.useruuidcheck,controller.getusergamelist)
 //get user rooms
-router.get("/:uuid_user/room",userMiddleware.useruuidcheck,controller.getuserroomlist)
+router.get("/:uuid_user/roomlist",userMiddleware.useruuidcheck,controller.getuserroomlist)
 
 //get user with username
 router.get("/search/:username",userMiddleware.usernamecheck,controller.getuserbyusername)
@@ -44,6 +44,8 @@ router.post("/:uuid_user/room/:uuid_room",userMiddleware.useruuidcheck,roomMiddl
 //block user
 router.post("/:uuid_user/block/:uuid_blocked",userMiddleware.useruuidcheck,userMiddleware.blockeduuidcheck,controller.blockuser)
 
+
+router.delete("/:uuid_user",userMiddleware.useruuidcheck,controller.deleteuser)
 //remove favorite from user's favoritelist
 router.delete("/:uuid_user/favorite/:uuid_friend",userMiddleware.useruuidcheck,userMiddleware.frienduuidcheck,controller.removefavorite)
 //remove friend from user's friendlist
