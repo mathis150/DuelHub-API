@@ -23,6 +23,10 @@ module.exports = (instance) => {
         modified: {
             type: DataTypes.BOOLEAN,
             defaultValues: false
+        },
+        uuid_article: {
+            type: DataTypes.UUID,
+            allowNull: false
         }
     }, {timestamp: false})
 }

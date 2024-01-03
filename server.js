@@ -8,6 +8,7 @@ import * as gamerouter from "./src/Hub/routers/game.router.js"
 import * as roomrouter from "./src/Hub/routers/room.router.js"
 import * as messagerouter from "./src/Hub/routers/message.router.js"
 
+const host = process.env.SERVERHOST || localhost
 const port = process.env.SERVERPORT || 3000
 
 app.use("/user",userrouter) //public
@@ -20,5 +21,5 @@ app.use("/",(req,res) => {
 })
 
 app.listen(port, () => {
-    console.log(`port: ${port}\ntesturl: http://127.0.0.1:${port}/testconnection\nurl: http://127.0.0.1:${port}`)
+    console.log(`port: ${port}\ntesturl: http://${host}:${port}/testconnection\nurl: http://127.0.0.1:${port}`)
 })

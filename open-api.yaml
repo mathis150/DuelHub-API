@@ -26,3 +26,8 @@ paths:
       responses:
         '200':
           description: OK
+  /wiki/articles:
+    get:
+      responses:
+        '200':
+          description: OK
