@@ -36,6 +36,5 @@ export const encryptpassword = (req,res,next) => {
 }
 
 export const emailcheck = (req,res,next) => {
-    if (!isEmail(req.body.email)) next({code:400,status:"given email failed the regex check, if you believe this is an error send a ticket to the github"})
-    next()
+    //TODO: check if email is valid
 }
