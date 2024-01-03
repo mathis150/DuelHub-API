@@ -18,20 +18,7 @@ module.exports = (instance) => {
             primaryKey: true,
             allowNull: false
         },
-        email: {
-            type: DataTypes.STRING(256),
-            allowNull: true
-        },
-        message_count: {
-            type: Datatypes.INTEGER,
-            allowNull: true
-
-        },
-        last_connection: {
-            type: DataTypes.DATE,
-            defaultValues: DataTypes.NOW
-        },
-        first_connection: {
+        created_at: {
             type: DataTypes.DATE,
             defaultValues: DataTypes.NOW
         },

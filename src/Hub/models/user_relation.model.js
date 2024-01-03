@@ -1,19 +1,19 @@
 import Datatypes from 'sequelize'
 
 module.exports = (instance) => {
-    return instance.define("studios", {
-        uuid: {
+    return instance.define("user_relations", {
+        uuid_user_primary: {
             type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
             primaryKey: true,
             allowNull: false
         },
-        studio_name: {
-            type: DataTypes.STRING,
+        uuid_user_secondary: {
+            type: DataTypes.UUID,
             allowNull: false
         },
-        country: {
-            type: DataTypes.STRING,
-        },
+        relation: {
+            type: Datatypes.STRING,
+            allowNull: false
+        }
     }, {timestamp: false})
 }

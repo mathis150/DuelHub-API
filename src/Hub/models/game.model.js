@@ -15,6 +15,12 @@ module.exports = (instance) => {
         series: {
             type: DataTypes.STRING,
         },
+        studio: {
+            type: DataTypes.STRING,
+        },
+        genre: {
+            type: DataTypes.STRING,
+        },
         desc: {
             type: DataTypes.TEXT,
         },
