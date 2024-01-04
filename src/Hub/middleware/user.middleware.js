@@ -6,7 +6,7 @@ export const useruuidcheck = (req,res,next) => {
 }
 
 export const usernamecheck = (req,res,next) => {
-    if(!isUUID(req.params.username)) next({code:400,status:"provided for parameter \"username\" is not a uuid"})
+    if(!req.params.username) next({code:400,status:"provided for parameter \"username\" is not a uuid"})
     next()
 }
 

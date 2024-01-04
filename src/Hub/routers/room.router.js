@@ -16,9 +16,9 @@ router.get("/",(req,res) => {
     res.status(500).json({code:500,status:"database is unavailable at this time"})
 })
 
-//get room uuid, name, population
+//get room uuid, name
 router.get("/:uuid_room",roomMiddleware.roomuuidcheck,controller.getroominfo)
-//get room uuid, name, population, message counts, owner, creation date, last message date
+//get room uuid, name, populwZation, message counts, owner, creation date, last message date
 router.get("/:uuid_room/details",roomMiddleware.roomuuidcheck,controller.getroominfodetails)
 //get room owner info
 router.get("/:uuid_room/owner",roomMiddleware.roomuuidcheck,controller.getowner)
