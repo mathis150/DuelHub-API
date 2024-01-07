@@ -1,7 +1,8 @@
-import Sequelize from 'sequelize'
+import { DataTypes, Sequelize} from 'sequelize'
 
-export const Game = (sequelize) => {
-    const model = sequelize.define("games",{
+const sequelize = new Sequelize('mysql::memory:')
+
+export const Game = sequelize.define("games",{
         uuid: {
             type: DataTypes.UUID,
             defaultValue: Sequelize.UUIDV4,
@@ -33,5 +34,3 @@ export const Game = (sequelize) => {
         }
     }
     ,{timestamp: false})
-    return model
-}

@@ -1,7 +1,8 @@
-import Sequelize from 'sequelize'
+import { DataTypes, Sequelize} from 'sequelize'
 
-export const Relation = (sequelize) => {
-    const model = sequelize.define("user_relations",{
+const sequelize = new Sequelize('mysql::memory:')
+
+export const Relation = sequelize.define("user_relations",{
         uuid_user_primary: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -12,9 +13,7 @@ export const Relation = (sequelize) => {
             allowNull: false
         },
         relation: {
-            type: Datatypes.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         }
     }, {timestamp: false})
-    return model
-}

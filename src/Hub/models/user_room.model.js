@@ -1,7 +1,8 @@
-import Sequelize from 'sequelize'
+import { DataTypes, Sequelize} from 'sequelize'
 
-export const User_Room = (sequelize) => {
-    const model = sequelize.define("user_users",{
+const sequelize = new Sequelize('mysql::memory:')
+
+export const User_Room = sequelize.define("user_rooms",{
         uuid_room: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -12,5 +13,3 @@ export const User_Room = (sequelize) => {
             allowNull: false
         }
     }, {timestamp: false})
-    return model
-}

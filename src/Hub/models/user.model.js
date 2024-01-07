@@ -1,7 +1,8 @@
-import Sequelize from 'sequelize'
+import { DataTypes, Sequelize} from 'sequelize'
 
-export const User = (sequelize) => {
-    const model = sequelize.define("users",{
+const sequelize = new Sequelize('mysql::memory:')
+
+export const User = sequelize.define("users",{
         uuid: {
             type: DataTypes.UUID,
             defaultValue: Sequelize.UUIDV4,
@@ -21,7 +22,7 @@ export const User = (sequelize) => {
             allowNull: false
         },
         confirmed: {
-            type: Datatypes.BOOLEAN,
+            type: DataTypes.BOOLEAN,
             default: false
         },
         last_connection: {
@@ -33,5 +34,3 @@ export const User = (sequelize) => {
             defaultValues: DataTypes.NOW
         },
     }, {timestamp: false})
-    return model
-}

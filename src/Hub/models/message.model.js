@@ -1,7 +1,8 @@
-import Sequelize from 'sequelize'
+import { DataTypes, Sequelize} from 'sequelize'
 
-export const Message = (sequelize) => {
-    const model = sequelize.define("messages",{
+const sequelize = new Sequelize('mysql::memory:')
+
+export const Message = sequelize.define("messages",{
         uuid: {
             type: DataTypes.UUID,
             defaultValue: Sequelize.UUIDV4,
@@ -13,7 +14,7 @@ export const Message = (sequelize) => {
             allowNull: false
         },
         content: {
-            type: DataTypes.TEXT(long),
+            type: DataTypes.TEXT(),
             allowNull: true
         },
         uuid_user: {
@@ -21,12 +22,10 @@ export const Message = (sequelize) => {
             allowNull: false
         },
         uuid_reply: {
-            type: Datatypes.UUID
+            type: DataTypes.UUID,
         },
         published: {
             type: DataTypes.DATE,
             defaultValues: DataTypes.NOW
         },
     }, {timestamp: false})
-    return model
-}
