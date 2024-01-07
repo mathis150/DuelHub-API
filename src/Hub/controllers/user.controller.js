@@ -3,7 +3,7 @@ import * as service from '../services/user.service.js'
 //? GET
 
 export const getuser = (req,res) => {
-    res.json(service.getuser(req.params.uuid_user))
+    res.json(JSON.stringify(service.getuser(req.params.uuid_user)))
 }
 
 export const getuserdetails = (req,res) => {
@@ -32,10 +32,6 @@ export const getuserbyusername = (req,res) => {
 
 
 //? POST
-
-export const createuser = (req,res) => {
-    res.json(service.adduser(req.body.username,req.body.password,req.body.email))
-}
 
 export const addfavorite = (req,res) => {
     res.json(service.addfavorite(req.params.uuid_user,req.params.uuid_favorite))

@@ -1,15 +1,15 @@
 import Sequelize from "sequelize"
 import dotenv from 'dotenv'
 
+import { Game } from '../models/game.model.js'
+
 dotenv.config()
 
-sequelize = new Sequelize(
+const sequelize = new Sequelize(
     process.env.SQLDATABASEHUB,
     process.env.SQL_USER,
     process.env.SQL_PASSWORD,
     {host: process.env.SQL_HOST, dialect: 'mysql'})
-
-Game = sequelize.import("../models/game.model.js")
 
 
 //?GET
@@ -29,6 +29,7 @@ export const getgame = async (uuid) => {
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "no game found with the given uuid"
+        return response
     }
 
     returnData.forEach((game) => {
@@ -56,6 +57,7 @@ export const getgamedetails = async (uuid) => {
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "no game found with the given uuid"
+        return response
     }
 
     returnData.forEach((game) => {
@@ -87,6 +89,7 @@ export const querywithname = async (name) => {
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "no game found with the given name"
+        return response
     }
 
     returnData.forEach((game) => {
@@ -114,6 +117,7 @@ export const querywithstudio = async (studio) => {
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "no game found with the given studio"
+        return response
     }
 
     returnData.forEach((game) => {
@@ -141,6 +145,7 @@ export const querywithgenre = async (genre) => {
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "no game found with the given genre"
+        return response
     }
 
     returnData.forEach((game) => {
@@ -176,6 +181,7 @@ export const addgame = async (title,series=null,studio=null,genre=null,desc=null
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "error in given information (title might is non nullable)"
+        return response
     }
 
     return response
@@ -193,6 +199,7 @@ export const changeinfo = async (uuid,title=null,series=null,studio=null,genre=n
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "no game found with the given uuid"
+        return response
     }
 
     returnData.forEach((game) => {
@@ -209,6 +216,7 @@ export const changeinfo = async (uuid,title=null,series=null,studio=null,genre=n
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "no game found with the given uuid"
+        return response
     }
 
     return response
@@ -228,6 +236,7 @@ export const deletegame = async (uuid) => {
     if (!(returnData instanceof Game)) {
         response.code = 400
         response.status = "no game found with the given uuid"
+        return response
     }
 
     return response

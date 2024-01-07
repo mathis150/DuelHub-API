@@ -9,13 +9,6 @@ import * as controller from '../controllers/room.controller.js'
 
 export const router = express.Router()
 
-router.get("/",(req,res) => {
-    //TODO: call database to see if its available
-    const available = true
-    if (available) res.status(200).json({code:200,status:"database is available"})
-    res.status(500).json({code:500,status:"database is unavailable at this time"})
-})
-
 //get room uuid, name
 router.get("/:uuid_room",roomMiddleware.roomuuidcheck,controller.getroominfo)
 //get room uuid, name, populwZation, message counts, owner, creation date, last message date
@@ -27,11 +20,13 @@ router.get("/:uuid_room/owner/details",roomMiddleware.roomuuidcheck,controller.g
 
 //? /:uuid_room/feed/
 //get room last few messages
-router.get("/:uuid_room/feed",roomMiddleware.roomuuidcheck,controller.getmessagefeed)
+router.get("/:uuid_room/roomfeed",roomMiddleware.roomuuidcheck,controller.getmessagefeed)
+//get room last few messages with offset
+router.get("/:uuid_room/roomfeed/:offset",roomMiddleware.roomuuidcheck,roomMiddleware.offsetuuidcheck,controller.getmessagefeedwithoffset)
 //get room last specified number of messages
-router.get("/:uuid_room/feed/:offset",roomMiddleware.roomuuidcheck,roomMiddleware.offsetuuidcheck,controller.getmessagefeedwithoffset)
-//get room last specified number of messages
-router.get("/:uuid_room/feed/:uuid_user/",roomMiddleware.roomuuidcheck,userMiddleware.useruuidcheck,controller.getmessagefromuser)
+router.get("/:uuid_room/userfeed/:uuid_user",roomMiddleware.roomuuidcheck,userMiddleware.useruuidcheck,controller.getmessagefromuser)
+//get room last specified number of messages with offset
+router.get("/:uuid_room/userfeed/:uuid_user/:offset",roomMiddleware.roomuuidcheck,userMiddleware.useruuidcheck,roomMiddleware.offsetuuidcheck,controller.getmessagefromuserwithoffset)
 
 //create room with given owner and name
 router.post("/",roomMiddleware.roombodycheck,controller.addroom)

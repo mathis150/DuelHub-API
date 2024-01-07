@@ -1,7 +1,7 @@
-import Datatypes from 'sequelize'
+import Sequelize from 'sequelize'
 
-module.exports = (instance) => {
-    return instance.define("users", {
+export const User = (sequelize) => {
+    const model = sequelize.define("users",{
         uuid: {
             type: DataTypes.UUID,
             defaultValue: Sequelize.UUIDV4,
@@ -20,6 +20,10 @@ module.exports = (instance) => {
             type: DataTypes.STRING(256),
             allowNull: false
         },
+        confirmed: {
+            type: Datatypes.BOOLEAN,
+            default: false
+        },
         last_connection: {
             type: DataTypes.DATE,
             defaultValues: DataTypes.NOW
@@ -29,4 +33,5 @@ module.exports = (instance) => {
             defaultValues: DataTypes.NOW
         },
     }, {timestamp: false})
+    return model
 }

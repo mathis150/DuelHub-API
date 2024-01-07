@@ -18,21 +18,24 @@ servers:
           - localhost:3000
         default: localhost:3000
 tags:
-  - name: Users
+  - name: User
     description: manage relation of user and user infos
-  - name: Messages
-    description: get and post messages in rooms
-  - name: Rooms
+  - name: Message
+    description: get and modify messages
+  - name: Room
     description: create rooms, manage members and get the messages inside
-  - name: Games
+  - name: Game
     description: add and modify game infos
+  - name: Auth
+    description: login and register user
 paths:
 
+#! User
 
-  /users/{uuid_user}:
+  /User/{uuid_user}:
     get:
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -51,7 +54,7 @@ paths:
     
     delete:
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -68,10 +71,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     
-  /users/{uuid_user}/details:
+  /user/{uuid_user}/details:
     get:
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -88,10 +91,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200UserDataDetails'
 
-  /users/{uuid_user}/friendlist:
+  /user/{uuid_user}/friendlist:
     get:
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -108,10 +111,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReturnUserFriendList200'
 
-  /users/{uuid_user}/favoritelist:
+  /user/{uuid_user}/favoritelist:
     get:
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -128,10 +131,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReturnUserFavoriteList200'
 
-  /users/{uuid_user}/gamelist:
+  /user/{uuid_user}/gamelist:
     get:
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -148,10 +151,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReturnUserGameList200'
 
-  /users/{uuid_user}/roomlist:
+  /user/{uuid_user}/roomlist:
     get:
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -168,10 +171,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReturnUserRoomList200'
 
-  /users/search/{username}:
+  /user/search/{username}:
     get:
       tags:
-        - Users
+        - User
       parameters:
         - name: username
           in: path
@@ -186,34 +189,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Return200UserData'
-  
-  /users/:
-    post:
-      description: Add user using body
-      tags:
-        - Users
-      requestBody:
-        $ref: '#/components/requestBodies/UserCreation'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Return200Empty'
-        '400':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReturnUserCreation400'
+                $ref: '#/components/schemas/Return200UserData'  
 
-  /users/{uuid_user}/favorite/{uuid_favorite}:
+  /user/{uuid_user}/favorite/{uuid_favorite}:
     post:
       description: add favorite to a user
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -237,7 +219,7 @@ paths:
     delete:
       description: remove favorite from a user
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -259,11 +241,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
 
-  /users/{uuid_user}/friend/{uuid_friend}:
+  /user/{uuid_user}/friend/{uuid_friend}:
     post:
       description: add a friend to a user
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -287,7 +269,7 @@ paths:
     delete:
       description: remove a friend from a user
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -309,11 +291,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
 
-  /users/{uuid_user}/game/{uuid_game}:
+  /user/{uuid_user}/game/{uuid_game}:
     post:
       description: add a game to a user
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -337,7 +319,7 @@ paths:
     delete:
       description: remove a game from a user
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -359,11 +341,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
 
-  /users/{uuid_user}/room/{uuid_room}:
+  /user/{uuid_user}/room/{uuid_room}:
     post:
-      description: add a room to a users list
+      description: add a room to a User list
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -385,9 +367,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     delete:
-      description: remove a room from a users list
+      description: remove a room from a User list
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -409,11 +391,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'            
   
-  /users/{uuid_user}/block/{uuid_blocked}:
+  /user/{uuid_user}/block/{uuid_blocked}:
     post:
-      description: add a user to a users blocked list
+      description: add a user to a User blocked list
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -435,9 +417,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     delete:
-      description: remove a user from a users blocked list
+      description: remove a user from a User blocked list
       tags:
-        - Users
+        - User
       parameters:
         - name: uuid_user
           in: path
@@ -459,8 +441,663 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
 
+#! MESSAGES
+
+  /message:
+    post:
+      tags:
+        - Message
+      description: create a message using a body
+      requestBody:
+        $ref: '#/components/requestBodies/MessageCreation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /message/{uuid_message}:
+    get:
+      tags:
+        - Message
+      parameters:
+        - name: uuid_message
+          in: path
+          description: uuid of the requested message
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200MessageData'
+    delete:
+      tags:
+        - Message
+      parameters:
+        - name: uuid_message
+          in: path
+          description: uuid of the message to delete
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+    post:
+      tags:
+        - Message
+      requestBody:
+        $ref: '#/components/requestBodies/MessageModify'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /message/{uuid_message}/details:
+    get:
+      tags:
+        - Message
+      parameters:
+        - name: uuid_message
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200MessageData'
+
+  /message/{uuid_message}/reply:
+    get:
+      tags:
+        - Message
+      parameters:
+        - name: uuid_message
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200MessageData'
+
+  #! ROOM
+
+  /room:
+    post:
+      tags:
+        - Room
+      requestBody:
+        $ref: '#/components/requestBodies/RoomCreation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+        
+  /room/{uuid_room}:
+    get:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200RoomData'
+    delete:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the room to delete
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+  
+  /room/{uuid_room}/details:
+    get:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200RoomDataDetails'
+  
+  /room/{uuid_room}/owner:
+    get:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200UserData'
+  
+  /room/{uuid_room}/owner/details:
+    get:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200UserDataDetails'
+  
+  /room/{uuid_room}/roomfeed:
+    get:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200RoomFeed'
+  
+  /room/{uuid_room}/roomfeed/{offset}:
+    get:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        - name: offset
+          in: path
+          description: offset of the query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200RoomFeedOffset'
+  
+  /room/{uuid_room}/userfeed/{uuid_user}:
+    get:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200RoomFeed'
+  
+  /room/{uuid_room}/userfeed/{uuid_user}/{offset}:
+    get:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+        - name: offset
+          in: path
+          description: offset of the query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200RoomFeedOffset'
+  
+  /room/{uuid_room}/rename/{new_name}:
+    post:
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        - name: new_name
+          in: path
+          description: new name of the room
+          required: true
+          schema:
+            type: string
+            example: discussing izanami's ribcage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /room/{uuid_room}/user/{uuid_user}:
+    post:
+        tags:
+          - Room
+        parameters:
+          - name: uuid_room
+            in: path
+            description: uuid of the requested room
+            required: true
+            schema:
+              type: string
+              example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+          - name: uuid_user
+            in: path
+            description: uuid of the requested user
+            required: true
+            schema:
+              type: string
+              example: 6a988430-1076-43f3-998e-52fe808f6162
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Return200Empty'
+    delete:
+      tags:
+          - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        - name: uuid_user
+          in: path
+          description: uuid of the user to delete
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /room/{uuid_room}/user/{uuid_user}/total:
+    delete:
+      tags:
+          - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        - name: uuid_user
+          in: path
+          description: uuid of the user to delete
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  #! ROOM
+
+  /game:
+    post:
+      tags:
+        - Game
+      requestBody:
+        $ref: '#/components/requestBodies/GameCreation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /game/{uuid_game}:
+    get:
+      tags:
+        - Game
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested game
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200GameData'
+    post:
+      tags:
+        - Game
+      requestBody:
+        $ref: '#/components/requestBodies/GameModify'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+    
+    delete:
+      tags:
+        - Game
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested game
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
+
+  /game/{uuid_game}/details:
+    get:
+      tags:
+        - Game
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200GameDataDetails'
+
+  /game/query/name/{name_game}:
+    get:
+      tags:
+        - Game
+      parameters:
+        - name: name_game
+          in: path
+          description: name of the game to query
+          required: true
+          schema:
+            type: string
+            example: "Blazblue: Centralfiction"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200GameData'
+
+  /game/query/studio/{name_studio}:
+    get:
+      tags:
+        - Game
+      parameters:
+        - name: name_studio
+          in: path
+          description: name of the studio to query
+          required: true
+          schema:
+            type: string
+            example: "ArcSystem Works"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200GameData'
+    
+  /game/query/genre/name_genre:
+    get:
+      tags:
+        - Game
+      parameters:
+        - name: name_genre
+          in: path
+          description: name of the genre to query
+          required: true
+          schema:
+            type: string
+            example: "Anime Fighter"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200GameData'
+
+  #! AUTH
+
+  /auth/register:
+    post:
+      description: Add user using body
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/UserRegistration'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Login'
+        '400':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserRegistration400'
+
+  /auth/login:
+    post:
+      description: Add user using body
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/UserRegistration'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Login'
+        '400':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserLogin400'
+
+
 components:
   schemas:
+
+    Return200Empty:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          default: null
+          example: null
+
+    #! USER
+
     DataUserEX1:
       type: object
       required:
@@ -540,58 +1177,6 @@ components:
           type: string
           default: 2024-04-03-11:32
           example: 2024-04-03-11:32
-
-    DataGameEx:
-      type: object
-      required:
-        - uuid_user
-      properties:
-        uuid:
-          type: string
-          default: 60f97de3-4d49-44de-8512-fbcef5fb1075
-          example: 60f97de3-4d49-44de-8512-fbcef5fb1075
-        username:
-          type: string
-          default: "BlazBlue: Centralfiction"
-          example: "BlazBlue: Centralfiction"
-
-    DataRoomEx:
-      type: object
-      required:
-        - uuid_user
-      properties:
-        uuid:
-          type: string
-          default: 8dbc2aaa-b2c2-414b-93e0-8b093b0fa639
-          example: 8dbc2aaa-b2c2-414b-93e0-8b093b0fa639
-        username:
-          type: string
-          default: G@ym3rs
-          example: G@ym3rs
-
-    Return200Empty:
-      type: object
-      required:
-        - username
-        - password
-        - email
-      properties:
-        code:
-          type: number
-          default: 200
-          example: 200
-        status:
-          type: string
-          default: null
-          example: null
-        request:
-          type: string
-          default: null
-          example: null
-        data:
-          type: array
-          default: null
-          example: null
 
     Return200UserData:
       type: object
@@ -727,9 +1312,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/DataRoomEx'
+            $ref: '#/components/schemas/DataRoomEX'
 
-    ReturnUserCreation400:
+    ReturnUserRegistration400:
       type: object
       required:
         - username
@@ -753,10 +1338,396 @@ components:
           default: null
           example: null
 
+    ReturnUserLogin400:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:
+        code:
+          type: number
+          default: 400
+          example: 400
+        status:
+          type: string
+          default: could not login with the given information
+          example: could not login with the given information
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          default: null
+          example: null
+
+  #! MESSAGE
+
+    DataMessageEX1:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 22ede912-8867-4e2b-8303-32f5912bd2d1
+          example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        content:
+          type: string
+          default: "@Inspecteur Pandouille guity gear ?"
+          example: "@Inspecteur Pandouille guity gear ?"
+
+    DataMessageEX2:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 85831773-0592-409a-a1bc-9b90a2ec1879
+          example: 85831773-0592-409a-a1bc-9b90a2ec1879
+        content:
+          type: string
+          default: "The game let me win so many 50/50s I might as well play it"
+          example: "The game let me win so many 50/50s I might as well play it"
+
+    DataMessageDetailsEX:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 209230c0-c6df-4972-9a3c-c99e189b2ed0
+          example: 209230c0-c6df-4972-9a3c-c99e189b2ed0
+        uuid_room:
+          type: string
+          default: ee05749d-5af1-415a-babb-05d80e68e084
+          example: ee05749d-5af1-415a-babb-05d80e68e084
+        uuid_user:
+          type: string
+          default: 6a988430-1076-43f3-998e-52fe808f6162
+          example: 6a988430-1076-43f3-998e-52fe808f6162
+        content:
+          type: string
+          default: "@Inspecteur Pandouille guity gear ?"
+          example: "@Inspecteur Pandouille guity gear ?"
+        uuid_reply:
+          type: string
+          default: 03cf4ee6-53f4-455b-bb41-1c648f974923
+          example: 03cf4ee6-53f4-455b-bb41-1c648f974923
+        published:
+          type: string
+          default: 2024-01-04-21:48
+          example: 2024-01-04-21:48
+
+    Return200MessageData:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataMessageEX1'
+      
+    Return200ReplyData:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataMessageEX1'
+  
+  #! ROOM
+
+    DataRoomEX:
+      type: object
+      required:
+        - uuid_room
+      properties:
+        uuid:
+          type: string
+          default: 22ede912-8867-4e2b-8303-32f5912bd2d1
+          example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        title::
+          type: string
+          default: G@ym3rs
+          example: G@ym3rs
+
+    DataRoomDetailsEX:
+      type: object
+      required:
+        - uuid_room
+      properties:
+        uuid:
+          type: string
+          default: 22ede912-8867-4e2b-8303-32f5912bd2d1
+          example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        title:
+          type: string
+          default: G@ym3rs
+          example: G@ym3rs
+        uuid_owner:
+          type: string
+          default: c0caee95-6951-40e8-997d-26dde569d7d6
+          example: c0caee95-6951-40e8-997d-26dde569d7d6
+        created_at:
+          type: string
+          default: 2024-11-14-21:23
+
+    DataRoomFeedEX:
+      type: object
+      required:
+        - uuid_room
+      properties:
+        data:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/DataMessageEX1'
+              - $ref: '#/components/schemas/DataMessageEX2'
+
+    DataRoomFeedOffsetEx:
+      type: object
+      required:
+        - uuid_room
+      properties:
+        data:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/DataMessageEX2'
+
+    Return200RoomData:
+      type: object
+      required:
+        - uuid_room
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRoomEX'
+
+    Return200RoomDataDetails:
+      type: object
+      required:
+        - uuid_room
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRoomDetailsEX'
+
+    Return200RoomFeed:
+      type: object
+      required:
+        - uuid_room
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRoomFeedEX'
+
+    Return200RoomFeedOffset:
+      type: object
+      required:
+        - uuid_room
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRoomFeedOffsetEx'
+
+  #! GAME
+
+    DataGameEx:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 60f97de3-4d49-44de-8512-fbcef5fb1075
+          example: 60f97de3-4d49-44de-8512-fbcef5fb1075
+        username:
+          type: string
+          default: "BlazBlue: Centralfiction"
+          example: "BlazBlue: Centralfiction"
+
+    DataGameExDetailsEx:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        uuid:
+          type: string
+          default: 60f97de3-4d49-44de-8512-fbcef5fb1075
+          example: 60f97de3-4d49-44de-8512-fbcef5fb1075
+        title:
+          type: string
+          default: "BlazBlue: Centralfiction"
+          example: "BlazBlue: Centralfiction"
+        series:
+          type: string
+          default: Blazblue
+          example: Blazblue
+        studio:
+          type: string
+          default: ArcSystem Works
+          example: ArcSystem Works
+        genre:
+          type: string
+          default: Anime fighter
+          example: Anime fighter
+
+    Return200GameData:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataGameEx'
+
+    Return200GameDataDetails:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataGameExDetailsEx'
+
+  #! AUTH
+
+    Return200Login:
+      type: object
+      required:
+        - uuid_user
+      properties:
+        code:
+          type: number
+          default: 200
+          example: 200
+        status:
+          type: string
+          default: null
+          example: null
+        request:
+          type: string
+          default: null
+          example: null
+        data:
+          type: string
+          example: 6IWkcZdmizfOrgwaQivZiwpH6CkVUYfFdtkPnhANJNzBfJPU6rwpLKIBahyiNX35
+
   requestBodies:
-    UserCreation:
+
+    UserRegistration:
       required: true
-      description: the body used to create a user
+      description: body used to create a user
       content:
         application/json:
           schema:
@@ -775,3 +1746,103 @@ components:
               email:
                 type: string
                 example: kentinter@gmail.com
+
+    MessageCreation:
+      required: true
+      description: body used to create a message
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - uuid_room
+              - uuid_user
+              - content
+            properties:
+              uuid_room:
+                type: string
+                example: 3b422384-51d5-4f65-88b5-e40ea0f5e518
+              uuid_user:
+                type: string
+                example: d7b180f2-0841-4ee1-ba78-8bc6b83c6c48
+              content:
+                type: string
+                example: "Also, the mangas that anime is based off dont repeat as much"
+              uuid_reply:
+                type: string
+                example: 302df3f5-6fb4-41a7-93a5-4b0cd05569e8
+    
+    MessageModify:
+      required: true
+      description: body used to modify a message
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content:
+                type: string
+                example: "You saw what i meant to say, my point stands, despite the typo"
+
+    RoomCreation:
+      required: true
+      description: body used to create a room
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - uuid_user
+              - title
+            properties:
+              uuid_user:
+                type: string
+                example: d7b180f2-0841-4ee1-ba78-8bc6b83c6c48
+              title:
+                type: string
+                example: Blazblue with the bros
+
+    GameCreation:
+      required: true
+      description: body used to create a game
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+            properties:
+              title:
+                type: string
+                example: "BlazBlue: Centralfiction"
+              series:
+                type: string
+                example: Blazblue
+
+    GameModify:
+      required: true
+      description: body used to create a game
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+            properties:
+              title:
+                type: string
+                example: "BlazBlue: Centralfiction"
+              series:
+                type: string
+                example: Blazblue
+              studio:
+                type: string
+                example: "ArcSystem Works"
+              genre:
+                type: string
+                example: "Air Dasher"
+              desc:
+                type: string
+                example: "very good game"

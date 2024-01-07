@@ -1,7 +1,7 @@
-import Datatypes from 'sequelize'
+import Sequelize from 'sequelize'
 
-module.exports = (instance) => {
-    return instance.define("user_relations", {
+export const Relation = (sequelize) => {
+    const model = sequelize.define("user_relations",{
         uuid_user_primary: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -16,4 +16,5 @@ module.exports = (instance) => {
             allowNull: false
         }
     }, {timestamp: false})
+    return model
 }

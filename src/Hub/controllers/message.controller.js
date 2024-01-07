@@ -21,5 +21,5 @@ export const modifymessage = (req,res) => {
 }
 
 export const deletemessage = (req,res) => {
-    res.json(service.addmessage(req.params.uuid_message))
+    res.json(service.deletemessage(req.params.uuid_message))
 }

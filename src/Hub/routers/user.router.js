@@ -7,13 +7,6 @@ import * as controller from '../controllers/user.controller.js'
 
 export const router = express.Router()
 
-router.get("/",(req,res) => {
-    //TODO: call database to see if its available
-    const available = true
-    if (available) res.status(200).json({code:200,status:"database is available"})
-    res.status(500).json({code:500,status:"database is unavailable at this time"})
-})
-
 //get user uuid, username 
 router.get("/:uuid_user",userMiddleware.useruuidcheck,controller.getuser)
 //get user uuid, username, email, last_connection, first_connection
@@ -31,8 +24,6 @@ router.get("/:uuid_user/roomlist",userMiddleware.useruuidcheck,controller.getuse
 //get user with username
 router.get("/search/:username",userMiddleware.usernamecheck,controller.getuserbyusername)
 
-//create user with given body
-router.post("/",userMiddleware.userbodycheck,controller.createuser)
 //add favorite to user's favoritelist
 router.post("/:uuid_user/favorite/:uuid_favorite",userMiddleware.useruuidcheck,userMiddleware.favoriteuuidcheck,controller.addfavorite)
 //add friend to user's friendlist

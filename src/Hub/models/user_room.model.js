@@ -1,7 +1,7 @@
-import Datatypes from 'sequelize'
+import Sequelize from 'sequelize'
 
-module.exports = (instance) => {
-    return instance.define("room_users", {
+export const User_Room = (sequelize) => {
+    const model = sequelize.define("user_users",{
         uuid_room: {
             type: DataTypes.UUID,
             primaryKey: true,
@@ -12,4 +12,5 @@ module.exports = (instance) => {
             allowNull: false
         }
     }, {timestamp: false})
+    return model
 }

@@ -1,18 +1,17 @@
 import Sequelize, { where } from "sequelize"
 import dotenv from 'dotenv'
-import { deleteallmessageinroom } from "./message.service"
+import { deleteallmessageinroom } from "./message.service.js"
+import { Room } from "../models/room.model.js"
+import { User_Room } from "../models/user_room.model.js"
 
 dotenv.config()
 
-sequelize = new Sequelize(
+var sequelize = new Sequelize(
     process.env.SQLDATABASEHUB,
     process.env.SQL_USER,
     process.env.SQL_PASSWORD,
     {host: process.env.SQL_HOST, dialect: 'mysql'})
-
-Room = sequelize.import("../models/room.model.js")
-
-User_Room = sequelize.import("../models/user_room.model.js")
+    
 //?GET
 
 export const getroominfo = async (uuid) => {

@@ -1,15 +1,14 @@
 import Sequelize, { where } from "sequelize"
 import dotenv from 'dotenv'
+import { Message } from "../models/message.model.js"
 
 dotenv.config()
 
-sequelize = new Sequelize(
+var sequelize = new Sequelize(
     process.env.DATABASE_CONV,
     process.env.SQL_USER,
     process.env.SQL_PASSWORD,
     {host: process.env.SQL_HOST, dialect: 'mysql'})
-
-Message = sequelize.import("../models/message.model.js")
 
 //?GET
 
@@ -93,7 +92,8 @@ export const getreply = async (uuid) => {
 
     returnData.forEach(async (message) => {
         if (message.uuid_reply === null) {
-            response.data.append({code: 404,status: "message is not a reply"})
+            response.code = 400
+            response.status = "message is not a reply"
             return
         }
 
@@ -196,6 +196,7 @@ export const addmessage = async (uuid_room,uuid_user,content,uuid_reply=null) =>
     if (!(returnData instanceof Message)) {
         response.code = 400
         response.status = "error in given information (uuid_room,uuid_user and content are non nullable)"
+        return response
     }
 
     return response
@@ -216,6 +217,7 @@ export const editmessage = async (uuid,content) => {
     if (!(returnData instanceof Message)) {
         response.code = 400
         response.status = "no message found with the given uuid"
+        return response
     }
 
     return response
@@ -237,6 +239,7 @@ export const deletemessage = async (uuid) => {
     if (!(returnData instanceof Message)) {
         response.code = 400
         response.status = "no message found with the given uuid"
+        return response
     }
 
     return response
@@ -253,6 +256,12 @@ export const removeallusermessageinroom = async (uuid_room,uuid_user) => {
 
     const returnData = await Message.destroy({where: {uuid_room: uuid_room,uuid_user: uuid_user}})
 
+    if (!(returnData instanceof Message)) {
+        response.code = 400
+        response.status = "no message found by this user in the given room"
+        return response
+    }
+
     return response
 }
 
@@ -266,6 +275,32 @@ export const deleteallmessageinroom = async (uuid_room) => {
     }
 
     const returnData = await Message.destroy({where: {uuid_room: uuid_room}})
+
+    if (!(returnData instanceof Message)) {
+        response.code = 400
+        response.status = "no message found in the given room"
+        return response
+    }
+
+    return response
+}
+
+export const deleteallusermessage = async (uuid_user) => {
+    await sequelize.sync()
+
+    var response = {
+        code: 200,
+        status: null,
+        request: null,
+    }
+
+    const returnData = await Message.destroy({where: {uuid_user: uuid_user}})
+
+    if (!(returnData instanceof Message)) {
+        response.code = 400
+        response.status = "no message found by the given user"
+        return response
+    }
 
     return response
 }

@@ -1,5 +1,6 @@
-import { isEmail } from "../utils/regex.util"
 import dotenv from 'dotenv'
+import * as service from '../services/auth.service.js'
+
 dotenv.config()
 
 const encrypt = (str,seed = process.env.ENCRYPT_SEED) => {
@@ -30,11 +31,58 @@ const encrypt = (str,seed = process.env.ENCRYPT_SEED) => {
     return o
 }
 
+export const validatejwttoken = (req,res,next) => {
+    if(!req.headers.authorization) next({code:400,status:"missing authorization token"})
+    if(service.validatejwttoken(req.headers.authorization,process.env.JWTSECRET).code == 400) {
+        next({code:401,status:"invalid authorization headers"})
+    }
+    next()
+}
+
+export const registrationbodycheck = (req,res,next) => {
+    var errorflag = false
+
+    if(!req.body.username) errorflag = true
+    if(!req.body.password) errorflag = true
+    if(!req.body.email) errorflag = true
+
+    if(errorflag) next({code:400,status:"one or more of the given information empty if you do not use a field set it to null"})
+    next()
+}
+
+export const loginbodycheck = (req,res,next) => {
+    var passwordflag = false
+    var authflag = 0
+
+    if(!req.body.username) authflag += 1
+    if(!req.body.email) authflag += 1
+    if(!req.body.password) passwordflag = true
+
+    if(authflag == 2) next({code:400,status:"you must have at least an email or a username field"})
+
+    if(passwordflag) next({code:400,status:"password missing"})
+    next()
+}
+
 export const encryptpassword = (req,res,next) => {
     if (!req.body.password) next({code:400,status:"no password given in body"})
     req.body.password = encrypt(req.body.password)
+    next()
 }
 
 export const emailcheck = (req,res,next) => {
-    //TODO: check if email is valid
+    if (!req.body.email) next({code:400,status:"no email given in body"})
+    req.body.password = encrypt(req.body.password)
+    next()
+}
+
+export const usernamecheck = (req,res,next) => {
+    if (!req.body.username) next({code:400,status:"no username given in body"})
+    next()
+}
+
+
+export const tokencheck = (req,res,next) => {
+    if (!req.body.token) next({code:400,status:"no token given"})
+    next()
 }

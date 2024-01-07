@@ -23,15 +23,11 @@ app.use(
     })
 )
 
-app.get("/testconnection",(req,res) => {
-    res.status(200).json({code:200,message:"successfully connected to database"})
-})
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocument))
 
 app.use((err,req,res,next) => {
     err.code = err.code || 500
     err.status = err.status || "no error message provided"
     res.json({code:err.code,status:err.status})
 })
-
-
 //Export pour server.js

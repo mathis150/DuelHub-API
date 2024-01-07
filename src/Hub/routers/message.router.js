@@ -4,13 +4,6 @@ import * as controller from '../controllers/message.controller.js'
 
 export const router = express.Router()
 
-router.get("/",(req,res) => {
-    //TODO: call database to see if its available
-    const available = true
-    if (available) res.status(200).json({code:200,status:"database is available"})
-    res.status(500).json({code:500,status:"database is unavailable at this time"})
-})
-
 //get specified message text
 router.get("/:uuid_message",messageMiddleware.messageuuidcheck,controller.getmessage)
 //get specified message text, owner, creation date, modified, uuid_reply

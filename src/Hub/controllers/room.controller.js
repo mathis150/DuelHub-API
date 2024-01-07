@@ -1,5 +1,5 @@
 import * as service from '../services/room.service.js'
-import { getuser } from '../services/user.service.js'
+import { getuser, getuserdetails } from '../services/user.service.js'
 import { getroomfeed, getuserfeed, removeallusermessageinroom } from '../services/message.service.js'
 
 //? GET
@@ -18,7 +18,11 @@ export const getowner = (req,res) => {
 
 export const getownerdetails = (req,res) => {
     const returnData = service.getroomrowner(req.params.uuid_room)
-    res.json(getuser(returnData.data[0].uuid))
+    if (returnData.code === 200) {
+        res.json(getuserdetails(returnData.data[0].uuid))
+    } else {
+        res.json(returnData)
+    }
 }
 
 export const getmessagefeed = (req,res) => {
@@ -31,6 +35,10 @@ export const getmessagefeedwithoffset = (req,res) => {
 
 export const getmessagefromuser = (req,res) => {
     res.json(getuserfeed(req.params.uuid_room,req.params.uuid_user))
+}
+
+export const getmessagefromuserwithoffset = (req,res) => {
+    res.json(getuserfeed(req.params.uuid_room,req.params.uuid_user,req.params.offset))
 }
 
 export const addroom = (req,res) => {
@@ -54,5 +62,10 @@ export const removeuser = (req,res) => {
 }
 
 export const removeuserandmessage = (req,res) => {
-    res.json(removeallusermessageinroom(req.params.uuid_room,req.params.uuid_user))
+    const returnData = service.removeuser(req.params.uuid_room,req.params.uuid_user)
+    if (returnData.code === 200) {
+        res.json(removeallusermessageinroom(req.params.uuid_room,req.params.uuid_user))
+    } else {
+        res.json(returnData)
+    }
 }

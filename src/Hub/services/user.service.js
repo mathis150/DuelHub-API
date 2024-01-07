@@ -1,24 +1,21 @@
-import Sequelize, { where } from "sequelize"
+import Sequelize from "sequelize"
 import dotenv from 'dotenv'
-import { getgame } from "./game.service"
-import { getroominfo } from "./room.service"
+import { getgame } from "./game.service.js"
+import { getroominfo } from "./room.service.js"
+import { deleteallusermessage } from "./message.service.js"
+
+import { User } from "../models/user.model.js"
+import { Relation } from "../models/user_relation.model.js"
+import { User_Room } from "../models/user_room.model.js"
+import { User_Game } from "../models/user_game.model.js"
 
 dotenv.config()
 
-sequelize = new Sequelize(
+var sequelize = new Sequelize(
     process.env.SQLDATABASEHUB,
     process.env.SQL_USER,
     process.env.SQL_PASSWORD,
     {host: process.env.SQL_HOST, dialect: 'mysql'})
-
-User = sequelize.import("../models/user.model.js")
-
-Relation = sequelize.import("../models/user_relation.model.js")
-
-User_Game = sequelize.import("../models/user_game.model.js")
-
-User_Room = sequelize.import("../models/user_room.model.js")
-
 //?GET
 
 export const getuser = async (uuid) => {
@@ -129,8 +126,8 @@ export const getuserfriendlist = async (uuid,start=0) => {
         var temp = {uuid: null,username: null}
         temp.uuid = relation.uuid_user_secondary
 
-        var returnData = await User.findAll({where: {uuid: relation.uuid_user_secondary}, limit: process.env.SQL_LIMIT})
-        temp.username = returnData[0].username
+        var tempReturnData = await User.findAll({where: {uuid: relation.uuid_user_secondary}, limit: process.env.SQL_LIMIT})
+        temp.username = tempReturnData[0].username
         response.data.append(temp)
     })
 
@@ -159,8 +156,8 @@ export const getuserfavoritelist = async (uuid,start=0) => {
         var temp = {uuid: null,username: null}
         temp.uuid = relation.uuid_user_secondary
 
-        var returnData = await User.findAll({where: {uuid: relation.uuid_user_secondary},limit: process.env.SQL_LIMIT})
-        temp.username = returnData[0].username
+        var tempReturnData = await User.findAll({where: {uuid: relation.uuid_user_secondary},limit: process.env.SQL_LIMIT})
+        temp.username = tempReturnData[0].username
         response.data.append(temp)
     })
 
@@ -216,11 +213,11 @@ export const getuserroomlist = async (uuid,start=0) => {
     }
 
     returnData.forEach(async (user_room) => {
-        var temp = {uuid: null,username: null}
-        temp.uuid = user_room.uuid
+        var temp = {uuid: null,title: null}
+        temp.uuid = user_room.uuid_room
 
-        var returnData = await getroominfo(user_room)
-        temp.title = returnData.data[0].title
+        var tempReturnData = await getroominfo(user_room.uuid_room)
+        temp.title = tempReturnData.data[0].title
         response.data.append(temp)
     })
 
@@ -228,33 +225,6 @@ export const getuserroomlist = async (uuid,start=0) => {
 }
 
 //?POST
-
-export const adduser = async (username,password,email) => {
-    await sequelize.sync()
-
-    var response = {
-        code: 200,
-        status: null,
-        request: null,
-        data: []
-    }
-
-    const user = {
-        username: username,
-        password: password,
-        email: email
-    }
-
-    const returnData = await User.create(user)
-
-    if (!(returnData instanceof User)) {
-        response.code = 400
-        response.status = "error in given information (username, password and email is non nullable)"
-        return response
-    }
-
-    return response
-}
 
 export const addfriend = async (uuid_user,uuid_friend) => {
     await sequelize.sync()
@@ -389,6 +359,26 @@ export const blockuser = async (uuid_user,uuid_blocked) => {
     return response
 }
 
+export const confirmuseremail = async (uuid) => {
+    await sequelize.sync()
+
+    var response = {
+        code: 200,
+        status: null,
+        request: null,
+        data: []
+    }
+
+    const returnData = await User.update({confirmed: true},{where: {uuid: uuid}})
+
+    if (!(returnData instanceof Relation)) {
+        response.code = 400
+        response.status = "could not confirm user address as user could not be found"
+        return response
+    }
+
+    return response
+}
 
 
 //?DELETE
@@ -403,13 +393,15 @@ export const deleteuser = async (uuid) => {
         data: []
     }
 
-    const returnData = await User.destroy({where: {uuid: uuid}})
+    var returnData = await User.destroy({where: {uuid: uuid}})
 
     if (!(returnData instanceof User)) {
         response.code = 400
         response.status = "no user found with the given uuid"
         return response
     }
+
+    var returnData = deleteallusermessage(uuid)
 
     return response
 }
@@ -519,3 +511,4 @@ export const unblockuser = async (uuid_user,uuid_blocked) => {
 
     return response
 }
+

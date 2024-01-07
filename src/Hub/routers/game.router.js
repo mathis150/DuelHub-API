@@ -4,13 +4,6 @@ import * as gameMiddleware from '../middleware/game.middleware.js'
 
 export const router = express.Router()
 
-router.get("/",(req,res) => {
-    //TODO: call database to see if its available
-    const available = true
-    if (available) res.status(200).json({code:200,status:"database is available"})
-    res.status(500).json({code:500,status:"database is unavailable at this time"})
-})
-
 //get game name, series, studio, platform, genre, wiki
 router.get("/:uuid_game",gameMiddleware.gameuuidcheck,controller.getgame)
 //get game name, series, studio, platform, genre, wiki, player online, day peak, month peak, alltime peak
