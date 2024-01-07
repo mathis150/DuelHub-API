@@ -4,10 +4,10 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-export const register = (req,res) => {
+export const register = async (req,res) => {
     var returnData
 
-    returnData = service.registeruser(req.body.username,req.body.password,req.body.email)
+    returnData = await service.registeruser(req.body.username,req.body.password,req.body.email)
     
     if(returnData.code != 200) {
         res.json(returnData)
@@ -19,19 +19,19 @@ export const register = (req,res) => {
             data: []
         }
 
-        response.data.append(service.createjwttoken({uuid: returnData.data[0].uuid,username: returnData.data[0].username}))
+        response.data.append(await service.createjwttoken({uuid: returnData.data[0].uuid,username: returnData.data[0].username}))
 
         res.json(response)
     }
 }
 
-export const login = (req,res) => {
+export const login = async (req,res) => {
     var returnData
 
     if(!req.body.username) {
-        returnData = res.json(service.loginemail(req.body.email,req.body.password))
+        returnData = res.json(await service.loginemail(req.body.email,req.body.password))
     } else {
-        returnData = res.json(service.loginusername(req.body.username,req.body.password))
+        returnData = res.json(await service.loginusername(req.body.username,req.body.password))
     }
 
     if(returnData.code != 200) {
@@ -46,12 +46,12 @@ export const login = (req,res) => {
             data: []
         }
 
-        response.data.append(service.createjwttoken({uuid: returnData.data[0].uuid,username: returnData.data[0].username}))
+        response.data.append(await service.createjwttoken({uuid: returnData.data[0].uuid,username: returnData.data[0].username}))
 
         res.json(response)
     }
 }
 
-export const confirmuser = (req,res) => {
-    res.json(service.validateemail(req.params.token))
+export const confirmuser = async (req,res) => {
+    res.json(await service.validateemail(req.params.token))
 }

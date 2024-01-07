@@ -1,19 +1,12 @@
-import Sequelize, { where } from "sequelize"
 import dotenv from 'dotenv'
 import { Message } from "../models/message.model.js"
 
 dotenv.config()
 
-var sequelize = new Sequelize(
-    process.env.DATABASE_CONV,
-    process.env.SQL_USER,
-    process.env.SQL_PASSWORD,
-    {host: process.env.SQL_HOST, dialect: 'mysql'})
-
 //?GET
 
 export const getmessage = async (uuid) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -22,9 +15,9 @@ export const getmessage = async (uuid) => {
         data: []
     }
 
-    const returnData = await Message.findAll({where: {uuid: uuid}, limit: process.env.SQL_LIMIT})
+    const returnData = await Message.findAll({where: {uuid: uuid}})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found with the given uuid"
         return response
@@ -41,7 +34,7 @@ export const getmessage = async (uuid) => {
 }
 
 export const getmessagedetails = async (uuid) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -50,9 +43,9 @@ export const getmessagedetails = async (uuid) => {
         data: []
     }
 
-    const returnData = await Message.findAll({where: {uuid: uuid}, limit: process.env.SQL_LIMIT})
+    const returnData = await Message.findAll({where: {uuid: uuid}})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found with the given uuid"
         return response
@@ -73,7 +66,7 @@ export const getmessagedetails = async (uuid) => {
 }
 
 export const getreply = async (uuid) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -82,9 +75,9 @@ export const getreply = async (uuid) => {
         data: []
     }
 
-    const returnData = await Message.findAll({where: {uuid: uuid}, limit: process.env.SQL_LIMIT})
+    const returnData = await Message.findAll({where: {uuid: uuid}})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found with the given uuid"
         return response
@@ -100,9 +93,9 @@ export const getreply = async (uuid) => {
         var temp = {uuid: null,content: null}
         temp.uuid = message.uuid_reply
 
-        const replydata = await Message.findAll({where: {uuid: uuid_reply}, limit: process.env.SQL_LIMIT})
+        const replydata = await Message.findAll({where: {uuid: uuid_reply}})
 
-        if (!(returnData instanceof Message)) {
+        if (replydata.length == 0) {
             response.code = 404
             response.status = "the message being replyed to is not available"
             response.data.append(temp)
@@ -117,7 +110,7 @@ export const getreply = async (uuid) => {
 }
 
 export const getroomfeed = async (uuid_room,start = 0) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -126,9 +119,9 @@ export const getroomfeed = async (uuid_room,start = 0) => {
         data: []
     }
 
-    const returnData = await Message.findAll({where: {uuid_room: uuid_room},offset: start, limit: process.env.SQL_LIMIT})
+    const returnData = await Message.findAll({where: {uuid_room: uuid_room},offset: start})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found with the given room"
         return response
@@ -145,7 +138,7 @@ export const getroomfeed = async (uuid_room,start = 0) => {
 }
 
 export const getuserfeed = async (uuid_room,uuid_user,start = 0) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -154,9 +147,9 @@ export const getuserfeed = async (uuid_room,uuid_user,start = 0) => {
         data: []
     }
 
-    const returnData = await Message.findAll({where: {uuid_room: uuid_room,uuid_user: uuid_user,},offset: start, limit: process.env.SQL_LIMIT})
+    const returnData = await Message.findAll({where: {uuid_room: uuid_room,uuid_user: uuid_user,},offset: start})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "the given user didnt post anything in this room"
         return response
@@ -175,7 +168,7 @@ export const getuserfeed = async (uuid_room,uuid_user,start = 0) => {
 //?POST
 
 export const addmessage = async (uuid_room,uuid_user,content,uuid_reply=null) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -193,7 +186,7 @@ export const addmessage = async (uuid_room,uuid_user,content,uuid_reply=null) =>
 
     const returnData = await Message.create(message)
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_room,uuid_user and content are non nullable)"
         return response
@@ -203,7 +196,7 @@ export const addmessage = async (uuid_room,uuid_user,content,uuid_reply=null) =>
 }
 
 export const editmessage = async (uuid,content) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -214,7 +207,7 @@ export const editmessage = async (uuid,content) => {
 
     const returnData = await Message.update({content: content},{where: {uuid: uuid}})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found with the given uuid"
         return response
@@ -226,7 +219,7 @@ export const editmessage = async (uuid,content) => {
 //?DELETE
 
 export const deletemessage = async (uuid) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -236,7 +229,7 @@ export const deletemessage = async (uuid) => {
 
     const returnData = await Message.destroy({where: {uuid: uuid}})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found with the given uuid"
         return response
@@ -246,7 +239,7 @@ export const deletemessage = async (uuid) => {
 }
 
 export const removeallusermessageinroom = async (uuid_room,uuid_user) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -256,7 +249,7 @@ export const removeallusermessageinroom = async (uuid_room,uuid_user) => {
 
     const returnData = await Message.destroy({where: {uuid_room: uuid_room,uuid_user: uuid_user}})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found by this user in the given room"
         return response
@@ -266,7 +259,7 @@ export const removeallusermessageinroom = async (uuid_room,uuid_user) => {
 }
 
 export const deleteallmessageinroom = async (uuid_room) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -276,7 +269,7 @@ export const deleteallmessageinroom = async (uuid_room) => {
 
     const returnData = await Message.destroy({where: {uuid_room: uuid_room}})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found in the given room"
         return response
@@ -286,7 +279,7 @@ export const deleteallmessageinroom = async (uuid_room) => {
 }
 
 export const deleteallusermessage = async (uuid_user) => {
-    await sequelize.sync()
+    await Message.sync()
 
     var response = {
         code: 200,
@@ -296,7 +289,7 @@ export const deleteallusermessage = async (uuid_user) => {
 
     const returnData = await Message.destroy({where: {uuid_user: uuid_user}})
 
-    if (!(returnData instanceof Message)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no message found by the given user"
         return response

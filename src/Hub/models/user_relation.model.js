@@ -1,8 +1,7 @@
-import { DataTypes, Sequelize} from 'sequelize'
+import { dbHub } from '../services/sequelize.service.js'
+import { DataTypes,Sequelize } from 'sequelize'
 
-const sequelize = new Sequelize('mysql::memory:')
-
-export const Relation = sequelize.define("user_relations",{
+export const Relation = dbHub.define("user_relations",{
         uuid_user_primary: {
             type: DataTypes.UUID,
             primaryKey: true,

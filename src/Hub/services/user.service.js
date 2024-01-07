@@ -1,4 +1,3 @@
-import Sequelize from "sequelize"
 import dotenv from 'dotenv'
 import { getgame } from "./game.service.js"
 import { getroominfo } from "./room.service.js"
@@ -11,15 +10,10 @@ import { User_Game } from "../models/user_game.model.js"
 
 dotenv.config()
 
-var sequelize = new Sequelize(
-    process.env.SQLDATABASEHUB,
-    process.env.SQL_USER,
-    process.env.SQL_PASSWORD,
-    {host: process.env.SQL_HOST, dialect: 'mysql'})
 //?GET
 
 export const getuser = async (uuid) => {
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -28,9 +22,9 @@ export const getuser = async (uuid) => {
         data: []
     }
 
-    const returnData = await User.findAll({where: {uuid: uuid}, limit: process.env.SQL_LIMIT})
+    const returnData = await User.findAll({where: {uuid: uuid}})
 
-    if (!(returnData instanceof User)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no User found with the given uuid"
         return response
@@ -47,7 +41,7 @@ export const getuser = async (uuid) => {
 }
 
 export const getuserdetails = async (uuid) => {
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -56,9 +50,9 @@ export const getuserdetails = async (uuid) => {
         data: []
     }
 
-    const returnData = await User.findAll({where: {uuid: uuid}, limit: process.env.SQL_LIMIT})
+    const returnData = await User.findAll({where: {uuid: uuid}})
 
-    if (!(returnData instanceof User)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no User found with the given uuid"
         return response
@@ -77,7 +71,7 @@ export const getuserdetails = async (uuid) => {
 }
 
 export const getuserbyusername = async (username) => {
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -86,9 +80,9 @@ export const getuserbyusername = async (username) => {
         data: []
     }
 
-    const returnData = await User.findAll({where: {username: username}, limit: process.env.SQL_LIMIT})
+    const returnData = await User.findAll({where: {username: username}})
 
-    if (!(returnData instanceof User)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no User found with the given uuid"
         return response
@@ -96,16 +90,16 @@ export const getuserbyusername = async (username) => {
 
     returnData.forEach((user) => {
         var temp = {uuid: null,username: null}
-        temp.username = user.uuid
+        temp.uuid = user.uuid
         temp.username = user.username
-        response.data.append(temp)
+        response.data[0] = temp
     })
 
     return response
 }
 
 export const getuserfriendlist = async (uuid,start=0) => {
-    await sequelize.sync()
+    await Relation.sync()
 
     var response = {
         code: 200,
@@ -114,9 +108,9 @@ export const getuserfriendlist = async (uuid,start=0) => {
         data: []
     }
 
-    var returnData = await Relation.findAll({where: {uuid_user_primary: uuid,relation: "friend"},offset: start,limit: process.env.SQL_LIMIT})
+    var returnData = await Relation.findAll({where: {uuid_user_primary: uuid,relation: "friend"},offset: start})
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no User found with the given uuid"
         return response
@@ -126,7 +120,7 @@ export const getuserfriendlist = async (uuid,start=0) => {
         var temp = {uuid: null,username: null}
         temp.uuid = relation.uuid_user_secondary
 
-        var tempReturnData = await User.findAll({where: {uuid: relation.uuid_user_secondary}, limit: process.env.SQL_LIMIT})
+        var tempReturnData = await User.findAll({where: {uuid: relation.uuid_user_secondary}})
         temp.username = tempReturnData[0].username
         response.data.append(temp)
     })
@@ -135,7 +129,7 @@ export const getuserfriendlist = async (uuid,start=0) => {
 }
 
 export const getuserfavoritelist = async (uuid,start=0) => {
-    await sequelize.sync()
+    await Relation.sync()
 
     var response = {
         code: 200,
@@ -144,9 +138,9 @@ export const getuserfavoritelist = async (uuid,start=0) => {
         data: []
     }
 
-    var returnData = await Relation.findAll({where: {uuid_user_primary: uuid,relation: "favorite"},offset: start,limit: process.env.SQL_LIMIT})
+    var returnData = await Relation.findAll({where: {uuid_user_primary: uuid,relation: "favorite"},offset: start})
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no User found with the given uuid"
         return response
@@ -156,7 +150,7 @@ export const getuserfavoritelist = async (uuid,start=0) => {
         var temp = {uuid: null,username: null}
         temp.uuid = relation.uuid_user_secondary
 
-        var tempReturnData = await User.findAll({where: {uuid: relation.uuid_user_secondary},limit: process.env.SQL_LIMIT})
+        var tempReturnData = await User.findAll({where: {uuid: relation.uuid_user_secondary}})
         temp.username = tempReturnData[0].username
         response.data.append(temp)
     })
@@ -165,7 +159,7 @@ export const getuserfavoritelist = async (uuid,start=0) => {
 }
 
 export const getusergamelist = async (uuid,start=0) => {
-    await sequelize.sync()
+    await User_Game.sync()
 
     var response = {
         code: 200,
@@ -174,9 +168,9 @@ export const getusergamelist = async (uuid,start=0) => {
         data: []
     }
 
-    var returnData = await User_Game.findAll({where: {uuid_user: uuid},offset: start,limit: process.env.SQL_LIMIT})
+    var returnData = await User_Game.findAll({where: {uuid_user: uuid},offset: start})
 
-    if (!(returnData instanceof User_Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "User does not have any games"
         return response
@@ -195,7 +189,7 @@ export const getusergamelist = async (uuid,start=0) => {
 }
 
 export const getuserroomlist = async (uuid,start=0) => {
-    await sequelize.sync()
+    await User_Room.sync()
 
     var response = {
         code: 200,
@@ -204,9 +198,9 @@ export const getuserroomlist = async (uuid,start=0) => {
         data: []
     }
 
-    var returnData = await User_Room.findAll({where: {uuid_user: uuid},offset: start, limit: process.env.SQL_LIMIT})
+    var returnData = await User_Room.findAll({where: {uuid_user: uuid},offset: start})
 
-    if (!(returnData instanceof User_Room)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "User is not a member of any room"
         return response
@@ -227,7 +221,7 @@ export const getuserroomlist = async (uuid,start=0) => {
 //?POST
 
 export const addfriend = async (uuid_user,uuid_friend) => {
-    await sequelize.sync()
+    await Relation.sync()
 
     var response = {
         code: 200,
@@ -244,7 +238,7 @@ export const addfriend = async (uuid_user,uuid_friend) => {
 
     const returnData = await Relation.create(user_relation)
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_friend is non nullable)"
         return response
@@ -254,7 +248,7 @@ export const addfriend = async (uuid_user,uuid_friend) => {
 }
 
 export const addfavorite = async (uuid_user,uuid_favorite) => {
-    await sequelize.sync()
+    await Relation.sync()
 
     var response = {
         code: 200,
@@ -271,7 +265,7 @@ export const addfavorite = async (uuid_user,uuid_favorite) => {
 
     const returnData = await Relation.create(user_relation)
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_favorite is non nullable)"
         return response
@@ -281,7 +275,7 @@ export const addfavorite = async (uuid_user,uuid_favorite) => {
 }
 
 export const addgame = async (uuid_user,uuid_game) => {
-    await sequelize.sync()
+    await User_Game.sync()
 
     var response = {
         code: 200,
@@ -297,7 +291,7 @@ export const addgame = async (uuid_user,uuid_game) => {
 
     const returnData = await User_Game.create(user_game)
 
-    if (!(returnData instanceof User_Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_game is non nullable)"
         return response
@@ -307,7 +301,7 @@ export const addgame = async (uuid_user,uuid_game) => {
 }
 
 export const addroom = async (uuid_user,uuid_room) => {
-    await sequelize.sync()
+    await User_Room.sync()
 
     var response = {
         code: 200,
@@ -323,7 +317,7 @@ export const addroom = async (uuid_user,uuid_room) => {
 
     const returnData = await User_Room.create(user_game)
 
-    if (!(returnData instanceof User_Room)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_room is non nullable)"
         return response
@@ -333,7 +327,7 @@ export const addroom = async (uuid_user,uuid_room) => {
 }
 
 export const blockuser = async (uuid_user,uuid_blocked) => {
-    await sequelize.sync()
+    await Relation.sync()
 
     var response = {
         code: 200,
@@ -350,7 +344,7 @@ export const blockuser = async (uuid_user,uuid_blocked) => {
 
     const returnData = await Relation.create(user_relation)
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_blocked is non nullable)"
         return response
@@ -360,7 +354,7 @@ export const blockuser = async (uuid_user,uuid_blocked) => {
 }
 
 export const confirmuseremail = async (uuid) => {
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -371,7 +365,7 @@ export const confirmuseremail = async (uuid) => {
 
     const returnData = await User.update({confirmed: true},{where: {uuid: uuid}})
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "could not confirm user address as user could not be found"
         return response
@@ -384,7 +378,7 @@ export const confirmuseremail = async (uuid) => {
 //?DELETE
 
 export const deleteuser = async (uuid) => {
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -395,7 +389,7 @@ export const deleteuser = async (uuid) => {
 
     var returnData = await User.destroy({where: {uuid: uuid}})
 
-    if (!(returnData instanceof User)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no user found with the given uuid"
         return response
@@ -407,7 +401,7 @@ export const deleteuser = async (uuid) => {
 }
 
 export const removefriend = async (uuid_user,uuid_friend) => {
-    await sequelize.sync()
+    await Relation.sync()
 
     var response = {
         code: 200,
@@ -419,7 +413,7 @@ export const removefriend = async (uuid_user,uuid_friend) => {
     var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_user,uuid_user_secondary: uuid_friend,relation:"friend"}})
     var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_friend,uuid_user_secondary: uuid_user,relation:"friend"}})
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "the specified user are not friends"
         return response
@@ -429,7 +423,7 @@ export const removefriend = async (uuid_user,uuid_friend) => {
 }
 
 export const removefavorite = async (uuid_user,uuid_favorite) => {
-    await sequelize.sync()
+    await Relation.sync()
 
     var response = {
         code: 200,
@@ -440,7 +434,7 @@ export const removefavorite = async (uuid_user,uuid_favorite) => {
 
     var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_user,uuid_user_secondary: uuid_favorite,relation:"favorite"}})
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "the specified user are not favorites"
         return response
@@ -450,7 +444,7 @@ export const removefavorite = async (uuid_user,uuid_favorite) => {
 }
 
 export const removegame = async (uuid_user,uuid_game) => {
-    await sequelize.sync()
+    await User_Game.sync()
 
     var response = {
         code: 200,
@@ -461,7 +455,7 @@ export const removegame = async (uuid_user,uuid_game) => {
     
     var returnData = await User_Game.destroy({where: {uuid_game: uuid_game,uuid_user: uuid_user}})
 
-    if (!(returnData instanceof User_Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "the user does not have this game; Or game or user dosnt exist"
         return response
@@ -471,7 +465,7 @@ export const removegame = async (uuid_user,uuid_game) => {
 }
 
 export const removeroom = async (uuid_user,uuid_room) => {
-    await sequelize.sync()
+    await User_Room.sync()
 
     var response = {
         code: 200,
@@ -482,7 +476,7 @@ export const removeroom = async (uuid_user,uuid_room) => {
 
     var returnData = await User_Room.destroy({where: {uuid_room: uuid_room,uuid_user: uuid_user}})
 
-    if (!(returnData instanceof User_Room)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "the user is not in this room; Or room or user dosnt exist"
         return response
@@ -492,7 +486,7 @@ export const removeroom = async (uuid_user,uuid_room) => {
 }
 
 export const unblockuser = async (uuid_user,uuid_blocked) => {
-    await sequelize.sync()
+    await Relation.sync()
 
     var response = {
         code: 200,
@@ -503,7 +497,7 @@ export const unblockuser = async (uuid_user,uuid_blocked) => {
 
     var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_user,uuid_user_secondary: uuid_blocked,relation:"blocked"}})
 
-    if (!(returnData instanceof Relation)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "the specified user are not favorites"
         return response

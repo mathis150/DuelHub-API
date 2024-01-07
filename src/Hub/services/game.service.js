@@ -1,21 +1,13 @@
-import Sequelize from "sequelize"
 import dotenv from 'dotenv'
 
 import { Game } from '../models/game.model.js'
 
 dotenv.config()
 
-const sequelize = new Sequelize(
-    process.env.SQLDATABASEHUB,
-    process.env.SQL_USER,
-    process.env.SQL_PASSWORD,
-    {host: process.env.SQL_HOST, dialect: 'mysql'})
-
-
 //?GET
 
 export const getgame = async (uuid) => {
-    await sequelize.sync()
+    await Game.sync()
 
     var response = {
         code: 200,
@@ -24,9 +16,9 @@ export const getgame = async (uuid) => {
         data: []
     }
 
-    const returnData = await Game.findAll({where: {uuid: uuid}, limit: process.env.SQL_LIMIT})
+    const returnData = await Game.findAll({where: {uuid: uuid}})
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no game found with the given uuid"
         return response
@@ -43,7 +35,7 @@ export const getgame = async (uuid) => {
 }
 
 export const getgamedetails = async (uuid) => {
-    await sequelize.sync()
+    await Game.sync()
 
     var response = {
         code: 200,
@@ -52,9 +44,9 @@ export const getgamedetails = async (uuid) => {
         data: []
     }
 
-    const returnData = await Game.findAll({where: {uuid: uuid}, limit: process.env.SQL_LIMIT})
+    const returnData = await Game.findAll({where: {uuid: uuid}})
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no game found with the given uuid"
         return response
@@ -75,7 +67,7 @@ export const getgamedetails = async (uuid) => {
 }
 
 export const querywithname = async (name) => {
-    await sequelize.sync()
+    await Game.sync()
 
     var response = {
         code: 200,
@@ -84,9 +76,9 @@ export const querywithname = async (name) => {
         data: []
     }
 
-    const returnData = await Game.findAll({where: {title: name}, limit: process.env.SQL_LIMIT})
+    const returnData = await Game.findAll({where: {title: name}})
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no game found with the given name"
         return response
@@ -103,7 +95,7 @@ export const querywithname = async (name) => {
 }
 
 export const querywithstudio = async (studio) => {
-    await sequelize.sync()
+    await Game.sync()
 
     var response = {
         code: 200,
@@ -112,9 +104,9 @@ export const querywithstudio = async (studio) => {
         data: []
     }
 
-    const returnData = await Game.findAll({where: {studio: studio}, limit: process.env.SQL_LIMIT})
+    const returnData = await Game.findAll({where: {studio: studio}})
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no game found with the given studio"
         return response
@@ -131,7 +123,7 @@ export const querywithstudio = async (studio) => {
 }
 
 export const querywithgenre = async (genre) => {
-    await sequelize.sync()
+    await Game.sync()
 
     var response = {
         code: 200,
@@ -140,9 +132,9 @@ export const querywithgenre = async (genre) => {
         data: []
     }
 
-    const returnData = await Game.findAll({where: {genre: genre}, limit: process.env.SQL_LIMIT})
+    const returnData = await Game.findAll({where: {genre: genre}})
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no game found with the given genre"
         return response
@@ -161,7 +153,7 @@ export const querywithgenre = async (genre) => {
 //?POST
 
 export const addgame = async (title,series=null,studio=null,genre=null,desc=null,published=null) => {
-    var response = {
+    var Game = {
         code: 200,
         status: null,
         request: null,
@@ -178,7 +170,7 @@ export const addgame = async (title,series=null,studio=null,genre=null,desc=null
 
     const returnData = await Game.create(game)
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (title might is non nullable)"
         return response
@@ -188,15 +180,15 @@ export const addgame = async (title,series=null,studio=null,genre=null,desc=null
 }
 
 export const changeinfo = async (uuid,title=null,series=null,studio=null,genre=null,desc=null,published=null) => {
-    var response = {
+    var Game = {
         code: 200,
         status: null,
         request: null,
     }
 
-    var returnData = await Game.findAll({where: {uuid: uuid}, limit: process.env.SQL_LIMIT})
+    var returnData = await Game.findAll({where: {uuid: uuid}})
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no game found with the given uuid"
         return response
@@ -213,7 +205,7 @@ export const changeinfo = async (uuid,title=null,series=null,studio=null,genre=n
     
     returnData = Game.update({title: title, series: series, studio: studio, genre: genre, desc: desc, published: published},{where: {uuid: uuid}})
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no game found with the given uuid"
         return response
@@ -225,7 +217,7 @@ export const changeinfo = async (uuid,title=null,series=null,studio=null,genre=n
 //?DELETE
 
 export const deletegame = async (uuid) => {
-    var response = {
+    var Game = {
         code: 200,
         status: null,
         request: null,
@@ -233,7 +225,7 @@ export const deletegame = async (uuid) => {
 
     const returnData = await Game.destroy({where: {uuid: uuid}})
 
-    if (!(returnData instanceof Game)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no game found with the given uuid"
         return response

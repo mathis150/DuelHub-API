@@ -1,4 +1,3 @@
-import Sequelize from "sequelize"
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import { getuser, confirmuseremail } from './user.service.js'
@@ -6,12 +5,6 @@ import nodeMailer from 'nodemailer'
 import { User } from '../models/user.model.js'
 
 dotenv.config()
-
-var sequelize = new Sequelize(
-    process.env.SQLDATABASEHUB,
-    process.env.SQL_USER,
-    process.env.SQL_PASSWORD,
-    {host: process.env.SQL_HOST, dialect: 'mysql'})
 
 const transporter = nodeMailer.createTransport({
     host: 'soja.o2switch.net',
@@ -24,7 +17,7 @@ const transporter = nodeMailer.createTransport({
 })
 
 export const loginusername = async (username,password) => {
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -33,9 +26,9 @@ export const loginusername = async (username,password) => {
         data: []
     }
 
-    const returnData = await User.findAll({where: {username: username,password: password}, limit: process.env.SQL_LIMIT})
+    const returnData = await User.findAll({where: {username: username,password: password}})
 
-    if (!(returnData instanceof User)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "could not login with the given information"
         return response
@@ -45,7 +38,7 @@ export const loginusername = async (username,password) => {
 }
 
 export const loginemail = async (email,password) => {
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -54,9 +47,9 @@ export const loginemail = async (email,password) => {
         data: []
     }
 
-    const returnData = await User.findAll({where: {email: email,password: password}, limit: process.env.SQL_LIMIT})
+    const returnData = await User.findAll({where: {email: email,password: password}})
 
-    if (!(returnData instanceof User)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "could not login with the given information"
         return response
@@ -66,7 +59,7 @@ export const loginemail = async (email,password) => {
 }
 
 export const registeruser = async (username,password,email) => {
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -75,15 +68,23 @@ export const registeruser = async (username,password,email) => {
         data: []
     }
 
+    var returnData = await User.findAll({where: {username: username,email: email}})
+
+    if (returnData.length == 0) {
+        response.code = 400
+        response.status = "the user already exist"
+        return response
+    }
+
     const user = {
         username: username,
         password: password,
         email: email
     }
 
-    const returnData = await User.create(user)
+    var returnData = await User.create(user)
 
-    if (!(returnData instanceof User)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (username, password and email is non nullable)"
         return response
@@ -99,7 +100,7 @@ export const createjwttoken = (data) => {
 export const validatejwttoken = async (token) => {
     const data = jwt.verify(token,process.env.JWTSECRET)
 
-    await sequelize.sync()
+    await User.sync()
 
     var response = {
         code: 200,
@@ -108,9 +109,9 @@ export const validatejwttoken = async (token) => {
         data: []
     }
 
-    const returnData = await User.findAll({where: {uuid: data.uuid,username: data.username}, limit: process.env.SQL_LIMIT})
+    const returnData = await User.findAll({where: {uuid: data.uuid,username: data.username}})
 
-    if (!(returnData instanceof User)) {
+    if (returnData.length == 0) {
         response.code = 400
         response.status = "no user linked to the given authentification token"
         return response

@@ -1,8 +1,7 @@
-import { DataTypes, Sequelize} from 'sequelize'
+import { dbHub } from '../services/sequelize.service.js'
+import { DataTypes,Sequelize } from 'sequelize'
 
-const sequelize = new Sequelize('mysql::memory:')
-
-export const Game = sequelize.define("games",{
+export const Game = dbHub.define("games",{
         uuid: {
             type: DataTypes.UUID,
             defaultValue: Sequelize.UUIDV4,
