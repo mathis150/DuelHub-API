@@ -10,5 +10,9 @@ export const User_Room = dbHub.define("user_rooms",{
         uuid_user: {
             type: DataTypes.UUID,
             allowNull: false
+        },
+        rank: {
+            type: DataTypes.STRING,
+            default: "member"
         }
     }, {timestamp: false})

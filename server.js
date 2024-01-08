@@ -12,10 +12,10 @@ import * as authrouter from "./src/Hub/routers/auth.router.js"
 const host = process.env.SERVERHOST || localhost
 const port = process.env.SERVERPORT || 3000
 
-app.use("/user",userrouter.router) //public
-app.use("/game",gamerouter.router) //public
-app.use("/room",roomrouter.router) //private
-app.use("/message",messagerouter.router) //private
+app.use("/user",authmiddleware.validatejwttoken,userrouter.router) //public
+app.use("/game",authmiddleware.validatejwttoken,gamerouter.router) //public
+app.use("/room",authmiddleware.validatejwttoken,roomrouter.router) //private
+app.use("/message",authmiddleware.validatejwttoken,messagerouter.router) //private
 app.use("/auth",authrouter.router)
 
 // app.use("/",(req,res) => {

@@ -24,12 +24,12 @@ export const getgame = async (uuid) => {
         return response
     }
 
-    returnData.forEach((game) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,title: null}
-        temp.uuid = game.uuid
-        temp.title = game.title
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.title = returnData[i].title
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -52,16 +52,16 @@ export const getgamedetails = async (uuid) => {
         return response
     }
 
-    returnData.forEach((game) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,title: null,series: null,studio: null,desc: null,published: null}
-        temp.uuid = game.uuid
-        temp.title = game.title
-        temp.series = game.series
-        temp.studio = game.studio
-        temp.desc = game.desc
-        temp.published = game.published
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.title = returnData[i].title
+        temp.series = returnData[i].series
+        temp.studio = returnData[i].studio
+        temp.desc = returnData[i].desc
+        temp.published = returnData[i].published
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -84,12 +84,12 @@ export const querywithname = async (name) => {
         return response
     }
 
-    returnData.forEach((game) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,title: null}
-        temp.uuid = game.uuid
-        temp.title = game.title
-        response.data.append(temp)
-    })
+        temp.uuid = gamereturnData[i].uuid
+        temp.title = gamereturnData[i].title
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -106,18 +106,12 @@ export const querywithstudio = async (studio) => {
 
     const returnData = await Game.findAll({where: {studio: studio}})
 
-    if (returnData.length == 0) {
-        response.code = 400
-        response.status = "no game found with the given studio"
-        return response
-    }
-
-    returnData.forEach((game) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,title: null}
-        temp.uuid = game.uuid
-        temp.title = game.title
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.title = returnData[i].title
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -140,12 +134,12 @@ export const querywithgenre = async (genre) => {
         return response
     }
 
-    returnData.forEach((game) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,title: null}
-        temp.uuid = game.uuid
-        temp.title = game.title
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.title = returnData[i].title
+        response.data.push(temp)
+    }
 
     return response
 }

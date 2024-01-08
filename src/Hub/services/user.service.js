@@ -30,12 +30,12 @@ export const getuser = async (uuid) => {
         return response
     }
 
-    returnData.forEach((user) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,username: null}
-        temp.username = user.uuid
-        temp.username = user.username
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.username = returnData[i].username
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -58,14 +58,14 @@ export const getuserdetails = async (uuid) => {
         return response
     }
 
-    returnData.forEach((user) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,username: null,last_connection: null,first_connection: null}
-        temp.uuid = user.uuid
-        temp.username = user.username
-        temp.last_connection = user.last_connection
-        temp.first_connection = user.first_connection
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.username = returnData[i].username
+        temp.last_connection = returnData[i].last_connection
+        temp.first_connection = returnData[i].first_connection
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -88,12 +88,12 @@ export const getuserbyusername = async (username) => {
         return response
     }
 
-    returnData.forEach((user) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,username: null}
-        temp.uuid = user.uuid
-        temp.username = user.username
-        response.data[0] = temp
-    })
+        temp.uuid = returnData[i].uuid
+        temp.username = returnData[i].username
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -116,14 +116,14 @@ export const getuserfriendlist = async (uuid,start=0) => {
         return response
     }
 
-    returnData.forEach(async (relation) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,username: null}
-        temp.uuid = relation.uuid_user_secondary
+        temp.uuid = returnData[i].uuid_user_secondary
 
-        var tempReturnData = await User.findAll({where: {uuid: relation.uuid_user_secondary}})
-        temp.username = tempReturnData[0].username
-        response.data.append(temp)
-    })
+        var tempReturnData = await User.findAll({where: {uuid: returnData[i].uuid_user_secondary}})
+        temp.username = tempReturnData.data[0].username
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -146,14 +146,14 @@ export const getuserfavoritelist = async (uuid,start=0) => {
         return response
     }
 
-    returnData.forEach(async (relation) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,username: null}
-        temp.uuid = relation.uuid_user_secondary
+        temp.uuid = returnData[i].uuid_user_secondary
 
-        var tempReturnData = await User.findAll({where: {uuid: relation.uuid_user_secondary}})
-        temp.username = tempReturnData[0].username
-        response.data.append(temp)
-    })
+        var tempReturnData = await User.findAll({where: {uuid: returnData[i].uuid_user_secondary}})
+        temp.username = tempReturnData.data[0].username
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -176,14 +176,14 @@ export const getusergamelist = async (uuid,start=0) => {
         return response
     }
 
-    returnData.forEach(async (user_game) => {
-        var temp = {uuid: null,username: null}
-        temp.uuid = user_game.uuid_game
+    for(let i = 0; i < returnData.length; i++) {
+        var temp = {uuid: null,title: null}
+        temp.uuid = returnData[i].uuid_game
 
-        var returnData = await getgame(uuid_game)
-        temp.title = returnData.data[0].title
-        response.data.append(temp)
-    })
+        var tempReturnData = await getroominfo(returnData[i].uuid_game)
+        temp.title = tempReturnData.data[0].title
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -206,14 +206,14 @@ export const getuserroomlist = async (uuid,start=0) => {
         return response
     }
 
-    returnData.forEach(async (user_room) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,title: null}
-        temp.uuid = user_room.uuid_room
+        temp.uuid = returnData[i].uuid_room
 
-        var tempReturnData = await getroominfo(user_room.uuid_room)
+        var tempReturnData = await getroominfo(returnData[i].uuid_room)
         temp.title = tempReturnData.data[0].title
-        response.data.append(temp)
-    })
+        response.data.push(temp)
+    }
 
     return response
 }

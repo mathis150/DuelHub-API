@@ -22,7 +22,8 @@ export const User = dbHub.define("users",{
         },
         confirmed: {
             type: DataTypes.BOOLEAN,
-            default: false
+            defaultValues: false,
+            allowNull: false
         },
         last_connection: {
             type: DataTypes.DATE,

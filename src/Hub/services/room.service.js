@@ -25,12 +25,12 @@ export const getroominfo = async (uuid) => {
         return response
     }
 
-    returnData.forEach((room) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,title: null}
-        temp.uuid = room.uuid
-        temp.title = room.title
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.title = returnData[i].title
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -53,15 +53,14 @@ export const getroominfodetails = async (uuid) => {
         return response
     }
 
-    returnData.forEach((room) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,title: null,uuid_owner: null,created_at: null}
-        temp.uuid = room.uuid
-        temp.title = room.title
-        temp.uuid_owner = room.uuid_owner
-        temp.created_at = room.created_at
-        
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.title = returnData[i].title
+        temp.uuid_owner = returnData[i].uuid_owner
+        temp.created_at = returnData[i].created_at
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -84,12 +83,12 @@ export const getroomrowner = async (uuid) => {
         return response
     }
 
-    returnData.forEach((room) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,uuid_owner: null}
-        temp.uuid = room.uuid
-        temp.uuid_owner = room.uuid_owner        
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.uuid_owner = returnData[i].uuid_owner
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -111,13 +110,20 @@ export const createroom = async (uuid_owner,title="New room") => {
         title: title
     }
 
-    const returnData = await Room.create(room)
+    var returnData = await Room.create(room)
 
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_owner is non nullable)"
         return response
     }
+
+    var temp = {uuid: null,uuid_owner: null}
+    temp.uuid = returnData.uuid
+    temp.uuid_owner = uuid_owner      
+    response.data.push(temp)
+
+    returnData = await adduser(returnData.uuid,uuid_owner,"owner")
 
     return response
 }
@@ -143,7 +149,7 @@ export const changename = async (uuid,title) => {
     return response
 }
 
-export const adduser = async (uuid_room,uuid_user) => {
+export const adduser = async (uuid_room,uuid_user,rank="member") => {
     await User_Room.sync()
 
     var response = {
@@ -155,7 +161,8 @@ export const adduser = async (uuid_room,uuid_user) => {
 
     const link = {
         uuid_room: uuid_room,
-        uuid_user: uuid_user
+        uuid_user: uuid_user,
+        rank: rank
     }
 
     const returnData = await User_Room.create(link)

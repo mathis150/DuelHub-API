@@ -34,6 +34,8 @@ export const loginusername = async (username,password) => {
         return response
     }
 
+    response.data.push(returnData[0])
+
     return response
 }
 
@@ -55,6 +57,8 @@ export const loginemail = async (email,password) => {
         return response
     }
 
+    response.data.push(returnData)
+
     return response
 }
 
@@ -70,7 +74,7 @@ export const registeruser = async (username,password,email) => {
 
     var returnData = await User.findAll({where: {username: username,email: email}})
 
-    if (returnData.length == 0) {
+    if (returnData.length != 0) {
         response.code = 400
         response.status = "the user already exist"
         return response
@@ -79,10 +83,15 @@ export const registeruser = async (username,password,email) => {
     const user = {
         username: username,
         password: password,
-        email: email
+        email: email,
+        confirmed: false
     }
 
-    var returnData = await User.create(user)
+    var returnData = await User.create(user).then((user) => {
+        return user
+    })
+
+    response.data.push(returnData)
 
     if (returnData.length == 0) {
         response.code = 400
@@ -153,6 +162,7 @@ export const validateemail = (token) => {
 }
 
 export const sendconfirmationemail = (user) => {
+    return
     const confirmationData = {
         uuid : user.uuid,
         email : user.email,

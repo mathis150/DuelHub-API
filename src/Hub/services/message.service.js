@@ -23,12 +23,12 @@ export const getmessage = async (uuid) => {
         return response
     }
 
-    returnData.forEach((message) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,content: null}
-        temp.uuid = message.uuid
-        temp.content = message.content
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.content = returnData[i].content
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -51,16 +51,16 @@ export const getmessagedetails = async (uuid) => {
         return response
     }
 
-    returnData.forEach((message) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,uuid_room: null,uuid_user: null,content: null,uuid_reply: null,published: null}
-        temp.uuid = message.uuid
-        temp.uuid_room = message.uuid_room
-        temp.uuid_user = message.uuid_user
-        temp.content = message.content
-        temp.uuid_reply = message.uuid_reply
-        temp.published = message.published
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.uuid_room = returnData[i].uuid_room
+        temp.uuid_user = returnData[i].uuid_user
+        temp.content = returnData[i].content
+        temp.uuid_reply = returnData[i].uuid_reply
+        temp.published = returnData[i].published
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -83,28 +83,28 @@ export const getreply = async (uuid) => {
         return response
     }
 
-    returnData.forEach(async (message) => {
-        if (message.uuid_reply === null) {
+    for(let i = 0; i < returnData.length; i++) {
+        if (returnData[i].uuid_reply === null) {
             response.code = 400
             response.status = "message is not a reply"
             return
         }
 
         var temp = {uuid: null,content: null}
-        temp.uuid = message.uuid_reply
+        temp.uuid = returnData[i].uuid_reply
 
         const replydata = await Message.findAll({where: {uuid: uuid_reply}})
 
         if (replydata.length == 0) {
             response.code = 404
             response.status = "the message being replyed to is not available"
-            response.data.append(temp)
+            response.data.push(temp)
             return
         }
 
         temp.content = replydata[0].content
-        response.data.append(temp)
-    })
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -127,12 +127,12 @@ export const getroomfeed = async (uuid_room,start = 0) => {
         return response
     }
 
-    returnData.forEach((message) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,content: null}
-        temp.uuid = message.uuid
-        temp.content = message.content
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.content = returnData[i].content
+        response.data.push(temp)
+    }
 
     return response
 }
@@ -155,12 +155,12 @@ export const getuserfeed = async (uuid_room,uuid_user,start = 0) => {
         return response
     }
 
-    returnData.forEach((message) => {
+    for(let i = 0; i < returnData.length; i++) {
         var temp = {uuid: null,content: null}
-        temp.uuid = message.uuid
-        temp.content = message.content
-        response.data.append(temp)
-    })
+        temp.uuid = returnData[i].uuid
+        temp.content = returnData[i].content
+        response.data.push(temp)
+    }
 
     return response
 }

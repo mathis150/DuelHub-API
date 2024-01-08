@@ -7,6 +7,6 @@ export const router = express.Router()
 
 router.post("/login",authMiddleware.encryptpassword,authMiddleware.loginbodycheck,controller.login)
 
-router.post("/register",authMiddleware.encryptpassword,authMiddleware.registrationbodycheck,authMiddleware.emailcheck,controller.register)
+router.post("/register",authMiddleware.encryptpassword,authMiddleware.registrationbodycheck,controller.register)
 
 router.post("/confirmation/:token",authMiddleware.tokencheck,controller.confirmuser)

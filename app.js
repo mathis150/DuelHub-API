@@ -26,8 +26,7 @@ app.use(
 app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocument))
 
 app.use((err,req,res,next) => {
-    err.code = err.code || 500
-    err.status = err.status || "no error message provided"
+    console.log("error as occured", JSON.stringify(err))
     res.json({code:err.code,status:err.status})
 })
 //Export pour server.js

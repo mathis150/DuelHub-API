@@ -1,4 +1,5 @@
 import * as service from "../services/auth.service.js"
+
 import dotenv from 'dotenv'
 
 
@@ -8,7 +9,10 @@ export const register = async (req,res) => {
     var returnData
 
     returnData = await service.registeruser(req.body.username,req.body.password,req.body.email)
-    
+
+    console.log(JSON.stringify(returnData))
+
+
     if(returnData.code != 200) {
         res.json(returnData)
     } else {
@@ -19,7 +23,7 @@ export const register = async (req,res) => {
             data: []
         }
 
-        response.data.append(await service.createjwttoken({uuid: returnData.data[0].uuid,username: returnData.data[0].username}))
+        response.data.push(await service.createjwttoken({uuid: returnData.data[0].uuid,username: returnData.data[0].username}))
 
         res.json(response)
     }
@@ -29,16 +33,14 @@ export const login = async (req,res) => {
     var returnData
 
     if(!req.body.username) {
-        returnData = res.json(await service.loginemail(req.body.email,req.body.password))
+        console.log("with email")
+        returnData = await service.loginemail(req.body.email,req.body.password)
     } else {
-        returnData = res.json(await service.loginusername(req.body.username,req.body.password))
+        console.log("with username")
+        returnData = await service.loginusername(req.body.username,req.body.password)
     }
 
-    if(returnData.code != 200) {
-        if(!returnData.data[0].confirmed)
-
-        res.json(returnData)
-    } else {
+    if(returnData.code == 200) {
         var response = {
             code: 200,
             status: null,
@@ -46,9 +48,17 @@ export const login = async (req,res) => {
             data: []
         }
 
-        response.data.append(await service.createjwttoken({uuid: returnData.data[0].uuid,username: returnData.data[0].username}))
+        if(returnData.data[0].confirmed) {
+            service.sendconfirmationemail(returnData.data[0])
+            response.status = "please confirm the email sent to your authentification address and reconnect"
+            res.json(response)
+        } else {
+            response.data.push(await service.createjwttoken({uuid: returnData.data[0].uuid,username: returnData.data[0].username}))
 
-        res.json(response)
+            res.json(response)
+        }
+    } else {
+        res.json(returnData)
     }
 }
 
