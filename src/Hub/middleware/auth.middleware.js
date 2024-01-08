@@ -31,10 +31,13 @@ const encrypt = (str,seed = process.env.ENCRYPT_SEED) => {
     return o
 }
 
-export const validatejwttoken = (req,res,next) => {
-    if(!req.headers.authorization) next({code:400,status:"missing authorization token"})
-    if(service.validatejwttoken(req.headers.authorization,process.env.JWTSECRET).code == 400) {
-        next({code:401,status:"invalid authorization headers"})
+export const validatejwttoken = async (req,res,next) => {    
+    if(!req.headers.authorization) {
+        return res.json({code:400,status:"missing authorization token"})
+    }
+
+    if((await service.validatejwttoken(req.headers.authorization,process.env.JWTSECRET)).code == 400) {
+        return res.json({code:401,status:"invalid authorization headers"})
     }
     next()
 }
@@ -46,7 +49,7 @@ export const registrationbodycheck = (req,res,next) => {
     if(!req.body.password) errorflag = true
     if(!req.body.email) errorflag = true
 
-    if(errorflag) next({code:400,status:"one or more of the given information empty if you do not use a field set it to null"})
+    if(errorflag) return res.json({code:400,status:"one or more of the given information empty if you do not use a field set it to null"})
     next()
 }
 
@@ -58,31 +61,31 @@ export const loginbodycheck = (req,res,next) => {
     if(!req.body.email) authflag += 1
     if(!req.body.password) passwordflag = true
 
-    if(authflag == 2) next({code:400,status:"you must have at least an email or a username field"})
+    if(authflag == 2) return res.json({code:400,status:"you must have at least an email or a username field"})
 
-    if(passwordflag) next({code:400,status:"password missing"})
+    if(passwordflag) return res.json({code:400,status:"password missing"})
     next()
 }
 
 export const encryptpassword = (req,res,next) => {
-    if (!req.body.password) next({code:400,status:"no password given in body"})
+    if (!req.body.password) return res.json({code:400,status:"no password given in body"})
     req.body.password = encrypt(req.body.password)
     next()
 }
 
 export const emailcheck = (req,res,next) => {
-    if (!req.body.email) next({code:400,status:"no email given in body"})
+    if (!req.body.email) return res.json({code:400,status:"no email given in body"})
     req.body.password = encrypt(req.body.password)
     next()
 }
 
 export const usernamecheck = (req,res,next) => {
-    if (!req.body.username) next({code:400,status:"no username given in body"})
+    if (!req.body.username) return res.json({code:400,status:"no username given in body"})
     next()
 }
 
 
 export const tokencheck = (req,res,next) => {
-    if (!req.body.token) next({code:400,status:"no token given"})
+    if (!req.body.token) return res.json({code:400,status:"no token given"})
     next()
 }
