@@ -10,13 +10,15 @@ servers:
     variables:
       protocol:
         enum:
-          - https
           - http
-        default: https
+          - http
+        default: http
       server:
         enum:
-          - localhost:3000
-        default: localhost:3000
+          - 127.0.0.1:4000
+        default: 127.0.0.1:4000
+
+
 tags:
   - name: User
     description: manage relation of user and user infos
@@ -34,6 +36,8 @@ paths:
 
   /User/{uuid_user}:
     get:
+      security:
+      - ApiKeyAuth: []
       tags:
         - User
       parameters:
@@ -53,6 +57,8 @@ paths:
                 $ref: '#/components/schemas/Return200UserData'
     
     delete:
+      security:
+        - ApiKeyAuth: []
       tags:
         - User
       parameters:
@@ -73,6 +79,8 @@ paths:
     
   /user/{uuid_user}/details:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - User
       parameters:
@@ -93,6 +101,8 @@ paths:
 
   /user/{uuid_user}/friendlist:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - User
       parameters:
@@ -113,6 +123,8 @@ paths:
 
   /user/{uuid_user}/favoritelist:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - User
       parameters:
@@ -133,6 +145,8 @@ paths:
 
   /user/{uuid_user}/gamelist:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - User
       parameters:
@@ -153,6 +167,8 @@ paths:
 
   /user/{uuid_user}/roomlist:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - User
       parameters:
@@ -173,6 +189,8 @@ paths:
 
   /user/search/{username}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - User
       parameters:
@@ -193,6 +211,8 @@ paths:
 
   /user/{uuid_user}/favorite/{uuid_favorite}:
     post:
+      security:
+        - ApiKeyAuth: []
       description: add favorite to a user
       tags:
         - User
@@ -217,6 +237,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     delete:
+      security:
+        - ApiKeyAuth: []
       description: remove favorite from a user
       tags:
         - User
@@ -243,6 +265,8 @@ paths:
 
   /user/{uuid_user}/friend/{uuid_friend}:
     post:
+      security:
+        - ApiKeyAuth: []
       description: add a friend to a user
       tags:
         - User
@@ -267,6 +291,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     delete:
+      security:
+        - ApiKeyAuth: []
       description: remove a friend from a user
       tags:
         - User
@@ -293,6 +319,8 @@ paths:
 
   /user/{uuid_user}/game/{uuid_game}:
     post:
+      security:
+        - ApiKeyAuth: []
       description: add a game to a user
       tags:
         - User
@@ -317,6 +345,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     delete:
+      security:
+        - ApiKeyAuth: []
       description: remove a game from a user
       tags:
         - User
@@ -343,6 +373,8 @@ paths:
 
   /user/{uuid_user}/room/{uuid_room}:
     post:
+      security:
+        - ApiKeyAuth: []
       description: add a room to a User list
       tags:
         - User
@@ -367,6 +399,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     delete:
+      security:
+        - ApiKeyAuth: []
       description: remove a room from a User list
       tags:
         - User
@@ -393,6 +427,8 @@ paths:
   
   /user/{uuid_user}/block/{uuid_blocked}:
     post:
+      security:
+        - ApiKeyAuth: []
       description: add a user to a User blocked list
       tags:
         - User
@@ -417,6 +453,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200Empty'
     delete:
+      security:
+        - ApiKeyAuth: []
       description: remove a user from a User blocked list
       tags:
         - User
@@ -445,6 +483,8 @@ paths:
 
   /message:
     post:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Message
       description: create a message using a body
@@ -460,6 +500,8 @@ paths:
 
   /message/{uuid_message}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Message
       parameters:
@@ -478,6 +520,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200MessageData'
     delete:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Message
       parameters:
@@ -497,6 +541,8 @@ paths:
                 $ref: '#/components/schemas/Return200Empty'
 
     post:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Message
       requestBody:
@@ -511,6 +557,8 @@ paths:
 
   /message/{uuid_message}/details:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Message
       parameters:
@@ -531,6 +579,8 @@ paths:
 
   /message/{uuid_message}/reply:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Message
       parameters:
@@ -553,6 +603,8 @@ paths:
 
   /room:
     post:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       requestBody:
@@ -567,6 +619,8 @@ paths:
         
   /room/{uuid_room}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -585,6 +639,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200RoomData'
     delete:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -605,6 +661,8 @@ paths:
   
   /room/{uuid_room}/details:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -625,6 +683,8 @@ paths:
   
   /room/{uuid_room}/owner:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -645,6 +705,8 @@ paths:
   
   /room/{uuid_room}/owner/details:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -665,6 +727,8 @@ paths:
   
   /room/{uuid_room}/roomfeed:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -685,6 +749,8 @@ paths:
   
   /room/{uuid_room}/roomfeed/{offset}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -712,6 +778,8 @@ paths:
   
   /room/{uuid_room}/userfeed/{uuid_user}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -739,6 +807,8 @@ paths:
   
   /room/{uuid_room}/userfeed/{uuid_user}/{offset}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -773,6 +843,8 @@ paths:
   
   /room/{uuid_room}/rename/{new_name}:
     post:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Room
       parameters:
@@ -800,31 +872,35 @@ paths:
 
   /room/{uuid_room}/user/{uuid_user}:
     post:
-        tags:
-          - Room
-        parameters:
-          - name: uuid_room
-            in: path
-            description: uuid of the requested room
-            required: true
-            schema:
-              type: string
-              example: 22ede912-8867-4e2b-8303-32f5912bd2d1
-          - name: uuid_user
-            in: path
-            description: uuid of the requested user
-            required: true
-            schema:
-              type: string
-              example: 6a988430-1076-43f3-998e-52fe808f6162
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Return200Empty'
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Room
+      parameters:
+        - name: uuid_room
+          in: path
+          description: uuid of the requested room
+          required: true
+          schema:
+            type: string
+            example: 22ede912-8867-4e2b-8303-32f5912bd2d1
+        - name: uuid_user
+          in: path
+          description: uuid of the requested user
+          required: true
+          schema:
+            type: string
+            example: 6a988430-1076-43f3-998e-52fe808f6162
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return200Empty'
     delete:
+      security:
+        - ApiKeyAuth: []
       tags:
           - Room
       parameters:
@@ -852,6 +928,8 @@ paths:
 
   /room/{uuid_room}/user/{uuid_user}/total:
     delete:
+      security:
+        - ApiKeyAuth: []
       tags:
           - Room
       parameters:
@@ -881,6 +959,8 @@ paths:
 
   /game:
     post:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Game
       requestBody:
@@ -895,6 +975,8 @@ paths:
 
   /game/{uuid_game}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Game
       parameters:
@@ -913,6 +995,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return200GameData'
     post:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Game
       requestBody:
@@ -926,6 +1010,8 @@ paths:
                 $ref: '#/components/schemas/Return200Empty'
     
     delete:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Game
       parameters:
@@ -946,6 +1032,8 @@ paths:
 
   /game/{uuid_game}/details:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Game
       parameters:
@@ -966,6 +1054,8 @@ paths:
 
   /game/query/name/{name_game}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Game
       parameters:
@@ -986,6 +1076,8 @@ paths:
 
   /game/query/studio/{name_studio}:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Game
       parameters:
@@ -1006,6 +1098,8 @@ paths:
     
   /game/query/genre/name_genre:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Game
       parameters:
@@ -1070,6 +1164,11 @@ paths:
 
 
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: authorization
   schemas:
 
     Return200Empty:
