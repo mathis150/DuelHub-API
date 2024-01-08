@@ -1,13 +1,11 @@
-import dotenv from 'dotenv'
-import { getgame } from "./game.service.js"
+import { getgame } from "./game.service.js" 
 import { getroominfo } from "./room.service.js"
 import { deleteallusermessage } from "./message.service.js"
-
 import { User } from "../models/user.model.js"
 import { Relation } from "../models/user_relation.model.js"
 import { User_Room } from "../models/user_room.model.js"
 import { User_Game } from "../models/user_game.model.js"
-
+import dotenv from 'dotenv'
 dotenv.config()
 
 //?GET
@@ -18,7 +16,7 @@ export const getuser = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get user with given uuid",
         data: []
     }
 
@@ -46,7 +44,7 @@ export const getuserdetails = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get user details with given uuid",
         data: []
     }
 
@@ -76,7 +74,7 @@ export const getuserbyusername = async (username) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get users with given username",
         data: []
     }
 
@@ -104,7 +102,7 @@ export const getuserfriendlist = async (uuid,start=0) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: `get user given user friendlist with offset ${start}`,
         data: []
     }
 
@@ -134,7 +132,7 @@ export const getuserfavoritelist = async (uuid,start=0) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: `get user given user favoritelist with offset ${start}`,
         data: []
     }
 
@@ -164,7 +162,7 @@ export const getusergamelist = async (uuid,start=0) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: `get user given user gamelist with offset ${start}`,
         data: []
     }
 
@@ -180,7 +178,7 @@ export const getusergamelist = async (uuid,start=0) => {
         var temp = {uuid: null,title: null}
         temp.uuid = returnData[i].uuid_game
 
-        var tempReturnData = await getroominfo(returnData[i].uuid_game)
+        var tempReturnData = await getgame(returnData[i].uuid_game)
         temp.title = tempReturnData.data[0].title
         response.data.push(temp)
     }
@@ -194,7 +192,7 @@ export const getuserroomlist = async (uuid,start=0) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: `get user given user roomlist with offset ${start}`,
         data: []
     }
 
@@ -226,7 +224,7 @@ export const addfriend = async (uuid_user,uuid_friend) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "add user to another user's friendlist",
         data: []
     }
 
@@ -253,7 +251,7 @@ export const addfavorite = async (uuid_user,uuid_favorite) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "add user to another user's favoritelist",
         data: []
     }
 
@@ -280,7 +278,7 @@ export const addgame = async (uuid_user,uuid_game) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "add user to another user's gamelist",
         data: []
     }
 
@@ -306,7 +304,7 @@ export const addroom = async (uuid_user,uuid_room) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "add user to another user's roomlist",
         data: []
     }
 
@@ -332,7 +330,7 @@ export const blockuser = async (uuid_user,uuid_blocked) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "add user to another user's blockedlist",
         data: []
     }
 
@@ -359,7 +357,7 @@ export const confirmuseremail = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "confirm a users email",
         data: []
     }
 
@@ -383,13 +381,13 @@ export const deleteuser = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "delete user with given uuid",
         data: []
     }
 
     var returnData = await User.destroy({where: {uuid: uuid}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "no user found with the given uuid"
         return response
@@ -406,14 +404,14 @@ export const removefriend = async (uuid_user,uuid_friend) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "remove friend with given uuid",
         data: []
     }
 
     var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_user,uuid_user_secondary: uuid_friend,relation:"friend"}})
     var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_friend,uuid_user_secondary: uuid_user,relation:"friend"}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "the specified user are not friends"
         return response
@@ -428,13 +426,13 @@ export const removefavorite = async (uuid_user,uuid_favorite) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "remove favorite with given uuid",
         data: []
     }
 
     var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_user,uuid_user_secondary: uuid_favorite,relation:"favorite"}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "the specified user are not favorites"
         return response
@@ -449,13 +447,13 @@ export const removegame = async (uuid_user,uuid_game) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "remove game with given uuid",
         data: []
     }
     
     var returnData = await User_Game.destroy({where: {uuid_game: uuid_game,uuid_user: uuid_user}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "the user does not have this game; Or game or user dosnt exist"
         return response
@@ -470,13 +468,13 @@ export const removeroom = async (uuid_user,uuid_room) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "remove room with given uuid",
         data: []
     }
 
     var returnData = await User_Room.destroy({where: {uuid_room: uuid_room,uuid_user: uuid_user}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "the user is not in this room; Or room or user dosnt exist"
         return response
@@ -491,13 +489,13 @@ export const unblockuser = async (uuid_user,uuid_blocked) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "remove blocked user with given uuid",
         data: []
     }
 
     var returnData = await Relation.destroy({where: {uuid_user_primary: uuid_user,uuid_user_secondary: uuid_blocked,relation:"blocked"}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "the specified user are not favorites"
         return response

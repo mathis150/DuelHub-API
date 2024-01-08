@@ -1,6 +1,5 @@
-import dotenv from 'dotenv'
 import { Message } from "../models/message.model.js"
-
+import dotenv from 'dotenv'
 dotenv.config()
 
 //?GET
@@ -11,7 +10,7 @@ export const getmessage = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get message with given uuid",
         data: []
     }
 
@@ -39,7 +38,7 @@ export const getmessagedetails = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get message details with given uuid",
         data: []
     }
 
@@ -71,7 +70,7 @@ export const getreply = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get message being replied to by the message from the given uuid",
         data: []
     }
 
@@ -115,7 +114,7 @@ export const getroomfeed = async (uuid_room,start = 0) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: `get room feed with offset ${start}`,
         data: []
     }
 
@@ -143,7 +142,7 @@ export const getuserfeed = async (uuid_room,uuid_user,start = 0) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: `get user feed with offset ${start}`,
         data: []
     }
 
@@ -173,7 +172,7 @@ export const addmessage = async (uuid_room,uuid_user,content,uuid_reply=null) =>
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "add message with room uuid, user uuid, content and optional reply uuid",
         data: []
     }
 
@@ -201,7 +200,7 @@ export const editmessage = async (uuid,content) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "edit content of message with given uuid",
         data: []
     }
 
@@ -224,12 +223,12 @@ export const deletemessage = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "delete message with given uuid",
     }
 
     const returnData = await Message.destroy({where: {uuid: uuid}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "no message found with the given uuid"
         return response
@@ -244,12 +243,12 @@ export const removeallusermessageinroom = async (uuid_room,uuid_user) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "delete all message of a user a room",
     }
 
     const returnData = await Message.destroy({where: {uuid_room: uuid_room,uuid_user: uuid_user}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "no message found by this user in the given room"
         return response
@@ -264,12 +263,12 @@ export const deleteallmessageinroom = async (uuid_room) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "delete all message in a room",
     }
 
     const returnData = await Message.destroy({where: {uuid_room: uuid_room}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "no message found in the given room"
         return response
@@ -284,12 +283,12 @@ export const deleteallusermessage = async (uuid_user) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "delete all message from a user",
     }
 
     const returnData = await Message.destroy({where: {uuid_user: uuid_user}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "no message found by the given user"
         return response

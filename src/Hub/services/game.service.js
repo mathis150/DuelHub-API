@@ -1,7 +1,5 @@
-import dotenv from 'dotenv'
-
 import { Game } from '../models/game.model.js'
-
+import dotenv from 'dotenv'
 dotenv.config()
 
 //?GET
@@ -12,7 +10,7 @@ export const getgame = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "return game info with the given uuid",
         data: []
     }
 
@@ -40,7 +38,7 @@ export const getgamedetails = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "return game info with the given uuid",
         data: []
     }
 
@@ -72,7 +70,7 @@ export const querywithname = async (name) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "find game with given username",
         data: []
     }
 
@@ -100,7 +98,7 @@ export const querywithstudio = async (studio) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "find game with the given studio",
         data: []
     }
 
@@ -122,7 +120,7 @@ export const querywithgenre = async (genre) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "find game with the given genre",
         data: []
     }
 
@@ -150,7 +148,7 @@ export const addgame = async (title,series=null,studio=null,genre=null,desc=null
     var Game = {
         code: 200,
         status: null,
-        request: null,
+        request: "add game with the given title, series, studio, genre, desc and publish date (unused field must be null)",
     }
 
     var game = {
@@ -177,7 +175,7 @@ export const changeinfo = async (uuid,title=null,series=null,studio=null,genre=n
     var Game = {
         code: 200,
         status: null,
-        request: null,
+        request: "change game info",
     }
 
     var returnData = await Game.findAll({where: {uuid: uuid}})
@@ -214,12 +212,12 @@ export const deletegame = async (uuid) => {
     var Game = {
         code: 200,
         status: null,
-        request: null,
+        request: "delete game with the given uuid",
     }
 
     const returnData = await Game.destroy({where: {uuid: uuid}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "no game found with the given uuid"
         return response

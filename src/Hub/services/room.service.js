@@ -1,8 +1,7 @@
-import dotenv from 'dotenv'
 import { deleteallmessageinroom } from "./message.service.js"
 import { Room } from "../models/room.model.js"
 import { User_Room } from "../models/user_room.model.js"
-
+import dotenv from 'dotenv'
 dotenv.config()
 
 //?GET
@@ -13,7 +12,7 @@ export const getroominfo = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get room info with given uuid",
         data: []
     }
 
@@ -41,7 +40,7 @@ export const getroominfodetails = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get room details with given uuid",
         data: []
     }
 
@@ -71,7 +70,7 @@ export const getroomrowner = async (uuid) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "get owner of room with given uuid",
         data: []
     }
 
@@ -134,7 +133,7 @@ export const changename = async (uuid,title) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "edit room name",
         data: []
     }
 
@@ -155,7 +154,7 @@ export const adduser = async (uuid_room,uuid_user,rank="member") => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "add user to a given room",
         data: []
     }
 
@@ -184,26 +183,19 @@ export const deleteroom = async (uuid_room) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "delete room with given uuid",
         data: []
     }
 
-    var returnData = await Room.destroy({where: {uuid_room: uuid_room}})
+    var returnData = await Room.destroy({where: {uuid: uuid_room}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "no room found with the given uuid"
         return response
     }
 
     await User_Room.sync()
-
-    var response = {
-        code: 200,
-        status: null,
-        request: null,
-        data: []
-    }
 
     var returnData = await User_Room.destroy({where: {uuid_room: uuid_room}})
 
@@ -218,13 +210,13 @@ export const removeuser = async (uuid_room,uuid_user) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "remove from room",
         data: []
     }
 
     const returnData = await User_Room.destroy({where: {uuid_room: uuid_room,uuid_user: uuid_user}})
 
-    if (returnData.length == 0) {
+    if (returnData == 0) {
         response.code = 400
         response.status = "no room found with the given uuid"
         return response

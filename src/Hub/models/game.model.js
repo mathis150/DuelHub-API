@@ -25,7 +25,7 @@ export const Game = dbHub.define("games",{
             type: DataTypes.TEXT,
         },
         published: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING,
         },
         added_at: {
             type: DataTypes.DATE,

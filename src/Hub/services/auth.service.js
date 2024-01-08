@@ -1,10 +1,10 @@
-import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import { getuser, confirmuseremail } from './user.service.js'
 import nodeMailer from 'nodemailer'
 import { User } from '../models/user.model.js'
-
+import dotenv from 'dotenv'
 dotenv.config()
+
 
 const transporter = nodeMailer.createTransport({
     host: 'soja.o2switch.net',
@@ -22,10 +22,10 @@ export const loginusername = async (username,password) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "login user with username and password",
         data: []
     }
-
+    
     const returnData = await User.findAll({where: {username: username,password: password}})
 
     if (returnData.length == 0) {
@@ -45,7 +45,7 @@ export const loginemail = async (email,password) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "login user with email and password",
         data: []
     }
 
@@ -68,7 +68,7 @@ export const registeruser = async (username,password,email) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "register user with username, password and email",
         data: []
     }
 
@@ -114,7 +114,7 @@ export const validatejwttoken = async (token) => {
     var response = {
         code: 200,
         status: null,
-        request: null,
+        request: "validate authetification token",
         data: []
     }
 
@@ -135,7 +135,7 @@ export const validateemail = (token) => {
     var result = {
         code: 200,
         status: "successfully confirmed your email",
-        request: null,
+        request: "confirm user's email address",
     }
 
     var returnData = getuser(data.uuid)
@@ -162,6 +162,7 @@ export const validateemail = (token) => {
 }
 
 export const sendconfirmationemail = (user) => {
+    //TODO: REMOVE THE RETURN WHEN IN PROD
     return
     const confirmationData = {
         uuid : user.uuid,
