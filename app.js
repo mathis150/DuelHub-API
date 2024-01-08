@@ -25,8 +25,4 @@ app.use(
 
 app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocument))
 
-app.use((err,req,res,next) => {
-    console.log("error as occured", JSON.stringify(err))
-    res.json({code:err.code,status:err.status})
-})
 //Export pour server.js
