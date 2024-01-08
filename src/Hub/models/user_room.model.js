@@ -2,9 +2,14 @@ import { dbHub } from '../services/sequelize.service.js'
 import { DataTypes,Sequelize } from 'sequelize'
 
 export const User_Room = dbHub.define("user_rooms",{
+        uuid: {
+            type: DataTypes.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true,
+            allowNull: false
+        },
         uuid_room: {
             type: DataTypes.UUID,
-            primaryKey: true,
             allowNull: false
         },
         uuid_user: {
