@@ -144,9 +144,19 @@ export const createroom = async (uuid_owner,title="New room") => {
     var temp = {uuid: null,uuid_owner: null}
     temp.uuid = returnData.uuid
     temp.uuid_owner = uuid_owner      
-    response.data.push(temp)
+    response.data.push(temp);
 
-    returnData = await adduser(returnData.uuid,uuid_owner,"owner")
+    returnData = await adduser(returnData.uuid,uuid_owner,"owner").then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    })
+
+    if(!(returnData instanceof Room))
+    {
+        reponse.code = 400
+        reponse.status = "Server is not abble to add the user to the room."
+    }
 
     return response
 }

@@ -193,11 +193,19 @@ export const addgame = async (title,series=null,studio=null,genre=null,desc=null
         published: published
     }
 
-    const returnData = await Game.create(game)
+    const returnData = await Game.create(game).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    })
 
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (title might is non nullable)"
+        return response
+    } else if (returnData == "ER_DUP_ENTRY") {
+        response.code = 400
+        response.status = "the game has already been created"
         return response
     }
 

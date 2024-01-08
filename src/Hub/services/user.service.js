@@ -275,11 +275,19 @@ export const addfriend = async (uuid_user,uuid_friend) => {
         relation: "friend"
     }
 
-    const returnData = await Relation.create(user_relation)
+    const returnData = await Relation.create(user_relation).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    })
 
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_friend is non nullable)"
+        return response
+    } else if (returnData == "ER_DUP_ENTRY") {
+        response.code = 400
+        response.status = "the two users are already friend"
         return response
     }
 
@@ -302,11 +310,19 @@ export const addfavorite = async (uuid_user,uuid_favorite) => {
         relation: "favorite"
     }
 
-    const returnData = await Relation.create(user_relation)
+    const returnData = await Relation.create(user_relation).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    })
 
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_favorite is non nullable)"
+        return response
+    } else if (returnData == "ER_DUP_ENTRY") {
+        response.code = 400
+        response.status = "the favorite is already exist"
         return response
     }
 
@@ -328,11 +344,19 @@ export const addgame = async (uuid_user,uuid_game) => {
         uuid_game: uuid_game,
     }
 
-    const returnData = await User_Game.create(user_game)
+    const returnData = await User_Game.create(user_game).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    })
 
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_game is non nullable)"
+        return response
+    } else if (returnData == "ER_DUP_ENTRY") {
+        response.code = 400
+        response.status = "the game is already registered"
         return response
     }
 
@@ -354,11 +378,19 @@ export const addroom = async (uuid_user,uuid_room) => {
         uuid_room: uuid_room,
     }
 
-    const returnData = await User_Room.create(user_game)
+    const returnData = await User_Room.create(user_game).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    })
 
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_room is non nullable)"
+        return response
+    } else if (returnData == "ER_DUP_ENTRY") {
+        response.code = 400
+        response.status = "the room has already been created"
         return response
     }
 
@@ -381,11 +413,19 @@ export const blockuser = async (uuid_user,uuid_blocked) => {
         relation: "blocked"
     }
 
-    const returnData = await Relation.create(user_relation)
+    const returnData = await Relation.create(user_relation).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    })
 
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_user and uuid_blocked is non nullable)"
+        return response
+    } else if (returnData == "ER_DUP_ENTRY") {
+        response.code = 400
+        response.status = "the user is already in the blocked"
         return response
     }
 

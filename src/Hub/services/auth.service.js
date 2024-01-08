@@ -90,6 +90,10 @@ export const registeruser = async (username,password,email) => {
 
     var returnData = await User.create(user).then((user) => {
         return user
+    }).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
     })
 
     response.data.push(returnData)
@@ -97,6 +101,10 @@ export const registeruser = async (username,password,email) => {
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (username, password and email is non nullable)"
+        return response
+    } else if (returnData == "ER_DUP_ENTRY") {
+        response.code = 400
+        response.status = "the user is already a registed"
         return response
     }
 

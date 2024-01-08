@@ -222,7 +222,11 @@ export const addmessage = async (uuid_room,uuid_user,content,uuid_reply=null) =>
         uuid_reply: uuid_reply
     }
 
-    const returnData = await Message.create(message)
+    const returnData = await Message.create(message).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    })
 
     if (returnData.length == 0) {
         response.code = 400
