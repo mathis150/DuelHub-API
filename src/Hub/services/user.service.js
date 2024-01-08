@@ -8,6 +8,8 @@ import { User_Game } from "../models/user_game.model.js"
 import dotenv from 'dotenv'
 dotenv.config()
 
+const url = `https://${process.env.SERVERHOST}:${process.env.SERVERPORT}`
+
 //?GET
 
 export const getuser = async (uuid) => {
@@ -29,9 +31,15 @@ export const getuser = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,username: null}
+        var temp = {
+            uuid: null,
+            username: null,
+            user_link: null,
+        }
+
         temp.uuid = returnData[i].uuid
         temp.username = returnData[i].username
+        temp.user_link = `${url}/user/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
@@ -57,11 +65,19 @@ export const getuserdetails = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,username: null,last_connection: null,first_connection: null}
+        var temp = {
+            uuid: null,
+            username: null,
+            last_connection: null,
+            first_connection: null,
+            user_link: null,
+        }
+
         temp.uuid = returnData[i].uuid
         temp.username = returnData[i].username
         temp.last_connection = returnData[i].last_connection
         temp.first_connection = returnData[i].first_connection
+        temp.user_link = `${url}/user/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
@@ -87,9 +103,15 @@ export const getuserbyusername = async (username) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,username: null}
+        var temp = {
+            uuid: null,
+            username: null,
+            user_link: null,
+        }
+
         temp.uuid = returnData[i].uuid
         temp.username = returnData[i].username
+        temp.user_link = `${url}/user/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
@@ -115,11 +137,16 @@ export const getuserfriendlist = async (uuid,start=0) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,username: null}
-        temp.uuid = returnData[i].uuid_user_secondary
+        var temp = {
+            uuid: null,
+            username: null,
+            user_link: null,
+        }
 
+        temp.uuid = returnData[i].uuid_user_secondary
         var tempReturnData = await User.findAll({where: {uuid: returnData[i].uuid_user_secondary}})
         temp.username = tempReturnData.data[0].username
+        temp.user_link = `${url}/user/${returnData[i].uuid_user_secondary}`
         response.data.push(temp)
     }
 
@@ -145,11 +172,16 @@ export const getuserfavoritelist = async (uuid,start=0) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,username: null}
-        temp.uuid = returnData[i].uuid_user_secondary
+        var temp = {
+            uuid: null,
+            username: null,
+            user_link: null,
+        }
 
+        temp.uuid = returnData[i].uuid_user_secondary
         var tempReturnData = await User.findAll({where: {uuid: returnData[i].uuid_user_secondary}})
         temp.username = tempReturnData.data[0].username
+        temp.user_link = `${url}/user/${returnData[i].uuid_user_secondary}`
         response.data.push(temp)
     }
 
@@ -175,11 +207,15 @@ export const getusergamelist = async (uuid,start=0) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null}
+        var temp = {
+            uuid: null,
+            title: null,
+            game_link:null,
+        }
         temp.uuid = returnData[i].uuid_game
-
         var tempReturnData = await getgame(returnData[i].uuid_game)
         temp.title = tempReturnData.data[0].title
+        temp.game_link = `${url}/game/${returnData[i].uuid_game}`
         response.data.push(temp)
     }
 
@@ -205,11 +241,16 @@ export const getuserroomlist = async (uuid,start=0) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null}
-        temp.uuid = returnData[i].uuid_room
+        var temp = {
+            uuid: null,
+            title: null,
+            room_link:null,
+        }
 
+        temp.uuid = returnData[i].uuid_room
         var tempReturnData = await getroominfo(returnData[i].uuid_room)
         temp.title = tempReturnData.data[0].title
+        temp.room_link = `${url}/room/${returnData[i].uuid_room}`
         response.data.push(temp)
     }
 

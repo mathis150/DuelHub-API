@@ -5,6 +5,7 @@ import { User } from '../models/user.model.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
+const url = `https://${process.env.SERVERHOST}:${process.env.SERVERPORT}`
 
 const transporter = nodeMailer.createTransport({
     host: 'soja.o2switch.net',
@@ -103,20 +104,32 @@ export const registeruser = async (username,password,email) => {
 }
 
 export const createjwttoken = (data) => {
-    return jwt.sign({uuid:data.uuid,username:data.username || null},process.env.JWTSECRET,{expiresIn: "2d"})
+    try {
+        return jwt.sign({uuid:data.uuid,username:data.username},process.env.JWTSECRET,{expiresIn: "2d"})
+    } catch (err){
+        return `error in creation of the jwt token contact an admin with the following error code: ${err}`
+    }
 }
 
 export const validatejwttoken = async (token) => {
-    const data = jwt.verify(token,process.env.JWTSECRET)
-
-    await User.sync()
-
+    var data;
+    
     var response = {
         code: 200,
         status: null,
         request: "validate authetification token",
         data: []
     }
+
+    try {
+        data = jwt.verify(token,process.env.JWTSECRET)
+    } catch (err){
+        response.code = 400
+        response.status = "authetification token invalid"
+        return response
+    }
+    
+    await User.sync()
 
     const returnData = await User.findAll({where: {uuid: data.uuid,username: data.username}})
 

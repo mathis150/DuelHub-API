@@ -2,6 +2,8 @@ import { Message } from "../models/message.model.js"
 import dotenv from 'dotenv'
 dotenv.config()
 
+const url = `https://${process.env.SERVERHOST}:${process.env.SERVERPORT}`
+
 //?GET
 
 export const getmessage = async (uuid) => {
@@ -23,9 +25,14 @@ export const getmessage = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,content: null}
+        var temp = {
+            uuid: null,
+            content: null,
+            message_link: null,
+        }
         temp.uuid = returnData[i].uuid
         temp.content = returnData[i].content
+        temp.message_link = `${url}/message/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
@@ -51,13 +58,27 @@ export const getmessagedetails = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,uuid_room: null,uuid_user: null,content: null,uuid_reply: null,published: null}
+        var temp = {
+            uuid: null,
+            uuid_room: null,
+            uuid_user: null,
+            content: null,
+            uuid_reply: null,
+            published: null,
+            message_link: null,
+            room_link:null,
+            user_link:null,
+        }
+
         temp.uuid = returnData[i].uuid
         temp.uuid_room = returnData[i].uuid_room
         temp.uuid_user = returnData[i].uuid_user
         temp.content = returnData[i].content
         temp.uuid_reply = returnData[i].uuid_reply
         temp.published = returnData[i].published
+        temp.message_link = `${url}/message/${returnData[i].uuid}`
+        temp.room_link = `${url}/room/${returnData[i].uuid_room}`
+        temp.user_link = `${url}/message/${returnData[i].uuid_user}`
         response.data.push(temp)
     }
 
@@ -89,8 +110,14 @@ export const getreply = async (uuid) => {
             return
         }
 
-        var temp = {uuid: null,content: null}
+        var temp = {
+            uuid: null,
+            content: null,
+            message_link: null,
+        }
+
         temp.uuid = returnData[i].uuid_reply
+        temp.message_link = `${url}/message/${returnData[i].uuid_reply}`
 
         const replydata = await Message.findAll({where: {uuid: uuid_reply}})
 
@@ -127,8 +154,14 @@ export const getroomfeed = async (uuid_room,start = 0) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,content: null}
+        var temp = {
+            uuid: null,
+            content: null,
+            message_link: null,
+        }
+
         temp.uuid = returnData[i].uuid
+        temp.message_link = `${url}/message/${returnData[i].uuid}`
         temp.content = returnData[i].content
         response.data.push(temp)
     }
@@ -155,8 +188,14 @@ export const getuserfeed = async (uuid_room,uuid_user,start = 0) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,content: null}
+        var temp = {
+            uuid: null,
+            content: null,
+            message_link: null,
+        }
+
         temp.uuid = returnData[i].uuid
+        temp.message_link = `${url}/message/${returnData[i].uuid}`
         temp.content = returnData[i].content
         response.data.push(temp)
     }

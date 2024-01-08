@@ -4,6 +4,8 @@ import { User_Room } from "../models/user_room.model.js"
 import dotenv from 'dotenv'
 dotenv.config()
 
+const url = `https://${process.env.SERVERHOST}:${process.env.SERVERPORT}`
+
 //?GET
 
 export const getroominfo = async (uuid) => {
@@ -25,8 +27,14 @@ export const getroominfo = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null}
+        var temp = {
+            uuid: null,
+            title: null,
+            room_link: null,
+        }
+
         temp.uuid = returnData[i].uuid
+        temp.room_link = `${url}/room/${returnData[i].uuid}`
         temp.title = returnData[i].title
         response.data.push(temp)
     }
@@ -53,11 +61,20 @@ export const getroominfodetails = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null,uuid_owner: null,created_at: null}
+        var temp = {
+            uuid: null,
+            title: null,
+            uuid_owner: null,
+            created_at: null,
+            room_link: null,
+            user_link: null,
+        }
         temp.uuid = returnData[i].uuid
         temp.title = returnData[i].title
         temp.uuid_owner = returnData[i].uuid_owner
         temp.created_at = returnData[i].created_at
+        temp.room_link = `${url}/room/${returnData[i].uuid}`
+        temp.user_link = `${url}/user/${returnData[i].uuid_owner}`
         response.data.push(temp)
     }
 
@@ -83,9 +100,16 @@ export const getroomrowner = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,uuid_owner: null}
+        var temp = {
+            uuid: null,
+            uuid_owner: null,
+            room_link: null,
+            user_link: null,
+        }
         temp.uuid = returnData[i].uuid
         temp.uuid_owner = returnData[i].uuid_owner
+        temp.room_link = `${url}/room/${returnData[i].uuid}`
+        temp.user_link = `${url}/user/${returnData[i].uuid_owner}`
         response.data.push(temp)
     }
 
@@ -164,11 +188,19 @@ export const adduser = async (uuid_room,uuid_user,rank="member") => {
         rank: rank
     }
 
-    const returnData = await User_Room.create(link)
+    const returnData = await User_Room.create(link).then(function(result){
+        return result
+    }).catch(function(error){
+        return error.original.code
+    });
 
     if (returnData.length == 0) {
         response.code = 400
         response.status = "error in given information (uuid_owner and uuid_user are non nullable)"
+        return response
+    } else if (returnData == "ER_DUP_ENTRY") {
+        response.code = 400
+        response.status = "user is already in the given room"
         return response
     }
 

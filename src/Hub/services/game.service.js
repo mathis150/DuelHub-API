@@ -2,6 +2,8 @@ import { Game } from '../models/game.model.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
+const url = `https://${process.env.SERVERHOST}:${process.env.SERVERPORT}`
+
 //?GET
 
 export const getgame = async (uuid) => {
@@ -23,9 +25,15 @@ export const getgame = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null}
+        var temp = {
+            uuid: null,
+            title: null,
+            game_link: null,
+        }
+
         temp.uuid = returnData[i].uuid
         temp.title = returnData[i].title
+        temp.game_link = `${url}/game/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
@@ -51,13 +59,23 @@ export const getgamedetails = async (uuid) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null,series: null,studio: null,desc: null,published: null}
+        var temp = {
+            uuid: null,
+            title: null,
+            series: null,
+            studio: null,
+            desc: null,
+            published: null,
+            game_link: null,
+        }
+
         temp.uuid = returnData[i].uuid
         temp.title = returnData[i].title
         temp.series = returnData[i].series
         temp.studio = returnData[i].studio
         temp.desc = returnData[i].desc
         temp.published = returnData[i].published
+        temp.game_link = `${url}/game/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
@@ -83,9 +101,14 @@ export const querywithname = async (name) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null}
+        var temp = {
+            uuid: null,
+            title: null,
+            game_link: null,
+        }
         temp.uuid = gamereturnData[i].uuid
         temp.title = gamereturnData[i].title
+        temp.game_link = `${url}/game/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
@@ -105,9 +128,14 @@ export const querywithstudio = async (studio) => {
     const returnData = await Game.findAll({where: {studio: studio}})
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null}
-        temp.uuid = returnData[i].uuid
-        temp.title = returnData[i].title
+        var temp = {
+            uuid: null,
+            title: null,
+            game_link: null,
+        }
+        temp.uuid = gamereturnData[i].uuid
+        temp.title = gamereturnData[i].title
+        temp.game_link = `${url}/game/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
@@ -133,9 +161,14 @@ export const querywithgenre = async (genre) => {
     }
 
     for(let i = 0; i < returnData.length; i++) {
-        var temp = {uuid: null,title: null}
-        temp.uuid = returnData[i].uuid
-        temp.title = returnData[i].title
+        var temp = {
+            uuid: null,
+            title: null,
+            game_link: null,
+        }
+        temp.uuid = gamereturnData[i].uuid
+        temp.title = gamereturnData[i].title
+        temp.game_link = `${url}/game/${returnData[i].uuid}`
         response.data.push(temp)
     }
 
