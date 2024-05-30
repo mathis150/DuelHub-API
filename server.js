@@ -1,27 +1,51 @@
-import dotenv from "dotenv"
+import express from 'express'
+import dotenv from 'dotenv'
+import { rootRouter } from './api/hub.js'
+import { wikiRouter } from './api/wiki.js'
+import { forumRouter } from './api/forum.js'
+import { authRouter } from './api/auth.js'
+
 dotenv.config()
 
-import { app } from "./app.js"
-import * as authmiddleware from "./src/Hub/middleware/auth.middleware.js"
-import * as userrouter from "./src/Hub/routers/user.router.js"
-import * as gamerouter from "./src/Hub/routers/game.router.js"
-import * as roomrouter from "./src/Hub/routers/room.router.js"
-import * as messagerouter from "./src/Hub/routers/message.router.js"
-import * as authrouter from "./src/Hub/routers/auth.router.js"
+const app = express()
 
-const host = process.env.SERVERHOST || localhost
-const port = process.env.SERVERPORT || 3000
+const port = process.env.EXTERNALPORT
 
-app.use("/user",authmiddleware.validatejwttoken,userrouter.router) //public
-app.use("/game",authmiddleware.validatejwttoken,gamerouter.router) //public
-app.use("/room",authmiddleware.validatejwttoken,roomrouter.router) //private
-app.use("/message",authmiddleware.validatejwttoken,messagerouter.router) //private
-app.use("/auth",authrouter.router)
+const disableCors = (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specified HTTP methods
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow specified headers
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allow credentials (if needed)
+  next();
+};
 
-// app.use("/",(req,res) => {
-//     res.json({code:200,status:"Api is available"})
-// })
+app.use(disableCors)
 
-app.listen(port, () => {
-    console.log(`url: http://127.0.0.1:${port}`)
+function sendError(res,status,message,err) {
+  res.status(status).json({
+    success:false,
+    message:message,
+    error:err
+  })
+}
+
+function sanitizePath(path) {
+  let pattern = /[^/]+\/\.\.\//;
+  while (pattern.test(path)) {
+      path = path.replace(pattern, '');
+  }
+  return path;
+}
+
+
+app.use("/",rootRouter)
+
+app.use("/wiki",wikiRouter)
+
+app.use("/forum",forumRouter)
+
+app.use("/auth",authRouter)
+
+app.listen(port,() => {
+  console.log(`server started http://localhost:${port}/`)
 })
