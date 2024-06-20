@@ -13,6 +13,7 @@ function sendError(res,status,message,err) {
   })
 }
 
+//login the user and gives back a unique token for later use
 authRouter.post("/login",(req,res) => {
   users.findOne({handle: req.body.handle}).then((user) => {
     if (user.password == encrypt(req.body.password,user.password_salt)) {
@@ -25,6 +26,7 @@ authRouter.post("/login",(req,res) => {
   });
 })
 
+//check if a user is already using this handle
 function checkHandle(req,res) {
   users.findOne({handle: req.body.handle}).then((result) => {
     if (!result) {
@@ -37,6 +39,7 @@ function checkHandle(req,res) {
   });
 }
 
+//check if password fits within guidelines
 function isPasswordValid(password) {
   const MINLENGTH = 8;
   const MAXLENGTH = 64;
@@ -54,6 +57,7 @@ function isPasswordValid(password) {
   return true;
 }
 
+//check if the password provided fits within guidelines
 function checkPassword(req,res,next) {
   if(isPasswordValid(req.body.password)) {
     next()
@@ -62,6 +66,7 @@ function checkPassword(req,res,next) {
   }
 }
 
+//register user and send a unique token for later use
 authRouter.post("/register",checkHandle,checkPassword,(req,res) => {
   const usersalt = encrypt(handle + password + username,process.env.REGISTERSECRET)
 

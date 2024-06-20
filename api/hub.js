@@ -1,5 +1,6 @@
 import express from 'express'
 import { events, games, users } from '../src/database/mongo.js';
+import { needLogin } from './middleware.js';
 
 export const rootRouter = express.Router()
 
@@ -11,10 +12,12 @@ function sendError(res,status,message,err) {
   })
 }
 
+//get main page
 rootRouter.get("/",(req,res) => {
   res.status(200).send("Welcum!")
 })
 
+//get the current featured games
 rootRouter.get("/game/featured",(req,res) => {
   games.find({featured:true}).toArray().then((result) => {
     res.status(200).json(result)
@@ -23,6 +26,7 @@ rootRouter.get("/game/featured",(req,res) => {
   });
 })
 
+//get a specific game
 rootRouter.get("/game/:name",(req,res) => {
   games.findOne({title: req.params.name}).then((result) => {
     res.status(200).json(result)
@@ -31,6 +35,7 @@ rootRouter.get("/game/:name",(req,res) => {
   });
 })
 
+//get a specific user
 rootRouter.get("/user/:handle",(req,res) => {
   users.findOne({handle:req.params.handle}).then((result) => {
     res.status(200).json(result)
@@ -39,6 +44,7 @@ rootRouter.get("/user/:handle",(req,res) => {
   });
 })
 
+//get a specific event
 rootRouter.get("/event/:name",(req,res) => {
   events.findOne({title: req.params.name}).then((result) => {
     res.status(200).json(result)
@@ -47,7 +53,8 @@ rootRouter.get("/event/:name",(req,res) => {
   });
 })
 
-rootRouter.post("/game",(req,res) => {
+//add a game
+rootRouter.post("/game",needLogin,(req,res) => {
   games.findOne({title: req.body.title}).then((result) => {
     if(!result) {
       games.insertOne({
@@ -68,7 +75,8 @@ rootRouter.post("/game",(req,res) => {
   
 })
 
-rootRouter.post("/event",(req,res) => {
+//add an event
+rootRouter.post("/event",needLogin,(req,res) => {
   events.findOne({title: req.body.title}).then((result) => {
     if(!result) {
       events.insertOne({

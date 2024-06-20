@@ -10,7 +10,9 @@ function sendError(res,status,message,err) {
   })
 }
 
-function needLogin(req,res,next) {
+//store user info for later use if the user provided auth token
+//should be used by every post request except login and register
+export function needLogin(req,res,next) {
   if(!req.headers.authorization) {
     res.status(401).send("you need to be logged in to do this action")
   }
@@ -23,7 +25,8 @@ function needLogin(req,res,next) {
   }
 }
 
-function getUserRank(req,res,next) {
+//get the current user rank and store it
+export function getUserRank(req,res,next) {
   users.findOne({_id:res.locals.user._id}).then((user) => {
     res.locals.user.rank = user.rank
     next()

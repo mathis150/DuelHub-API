@@ -1,6 +1,7 @@
 import express from 'express'
 import { message, topic } from '../src/database/mongo.js'
 import { ObjectId } from 'mongodb'
+import { needLogin } from './middleware.js'
 
 export const forumRouter = express.Router()
 
@@ -15,6 +16,7 @@ function sendError(res,status,message,err) {
 const FORUMLIMIT = 20
 const MESSAGELIMIT = 50
 
+//return the last {{FORUMLIMIT}} topics in the forum
 forumRouter.get("/",(req,res) => {
   const start = req.query.page ? req.query.page * FORUMLIMIT : 0
   topic.find({}).sort({_id : -1}).skip(start).limit(FORUMLIMIT).toArray().then((result) => {
@@ -28,7 +30,8 @@ forumRouter.get("/",(req,res) => {
   });
 })
 
-forumRouter.post("/",(req,res) => {
+//add a topic to the database
+forumRouter.post("/",needLogin,(req,res) => {
   topic.insertOne({
     title: req.body.title,
     date: new Date(),
@@ -40,6 +43,7 @@ forumRouter.post("/",(req,res) => {
   });
 })
 
+//get the las messages of a topic given a page number
 forumRouter.get("/:topicId",(req,res) => {
   const start = req.query.page ? req.query.page * MESSAGELIMIT : 0
   message.find({topic:new ObjectId(req.params.topicId)}).skip(start).limit(MESSAGELIMIT).toArray().then((result) => {
@@ -53,7 +57,8 @@ forumRouter.get("/:topicId",(req,res) => {
   });
 })
 
-forumRouter.post("/:topicId",(req,res) => {  
+//add a message to a topic
+forumRouter.post("/:topicId",needLogin,(req,res) => {  
   const doc = {
     authorId : req.body.authorId,
     content : req.body.content,

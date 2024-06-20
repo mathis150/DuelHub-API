@@ -3,6 +3,7 @@ import multer from 'multer'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
+import { needLogin } from './middleware'
 dotenv.config()
 
 export const fileRouter = express.Router()
@@ -16,6 +17,7 @@ function sendError(res,status,message,err) {
   })
 }
 
+//get any file 
 fileRouter.get("/*",(req,res) => {
   res.sendFile(`${process.env.DATAPATH}/${sanitizePath(req.params[0])}`)
 })
@@ -32,7 +34,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage})
 
-fileRouter.post("/wiki",upload.single('image'),(req,res) => {
+fileRouter.post("/wiki",needLogin,upload.single('image'),(req,res) => {
   res.send("image added")
   fs.rename(req.file.path,path.join(process.env.DATAPATH,'wiki',req.body.game,req.body.item,req.file.filename))
 })
